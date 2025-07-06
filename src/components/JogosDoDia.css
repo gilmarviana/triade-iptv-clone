@@ -62,7 +62,7 @@
 
 .period-selector label, .sort-selector label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -99,7 +99,7 @@
 
 .date-selector label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -131,7 +131,7 @@
 
 .date-display span {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   text-transform: capitalize;
 }
 
@@ -197,7 +197,7 @@
 }
 
 .jogos-empty h3 {
-  color: #ffb300;
+  color: #d68910;
   margin-bottom: 0.5rem;
 }
 
@@ -278,7 +278,7 @@
 
 .estadio-label {
   font-size: 0.8rem;
-  color: #ffb300;
+  color: #d68910;
   font-weight: 600;
 }
 
@@ -351,14 +351,14 @@
 .score-text {
   font-size: 2rem;
   font-weight: 700;
-  color: #ffb300;
+  color: #d68910;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .time-score {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #ffb300;
+  color: #d68910;
   margin-top: 0.5rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -418,7 +418,7 @@
 }
 
 .jogos-info h3 {
-  color: #ffb300;
+  color: #d68910;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -566,7 +566,7 @@
 
 .league-selector label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -608,7 +608,7 @@
 }
 
 .selected-league-info h3 {
-  color: #ffb300;
+  color: #d68910;
   font-size: 1.8rem;
   margin: 0 0 0.5rem 0;
   font-weight: 700;
@@ -691,7 +691,7 @@
 .jogos-info-summary p {
   margin: 0;
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
 }
 
 .pagination {
@@ -781,7 +781,7 @@
 
 .filter-selector label, .round-selector label, .round-date-selector label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -882,7 +882,7 @@
 
 .proximo-jogo-section h3 {
   text-align: center;
-  color: #ffb300;
+  color: #d68910;
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
@@ -916,7 +916,7 @@
 
 .data-proximo {
   font-size: 0.9rem;
-  color: #ffb300;
+  color: #d68910;
   font-weight: 600;
   margin-top: 0.5rem;
   display: block;
@@ -931,7 +931,7 @@
 
 .rodada-selector label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -1067,7 +1067,7 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.07);
   font-size: 1rem;
-  color: #ffb300;
+  color: #d68910;
   font-weight: 600;
   text-align: center;
   gap: 0.5rem;
@@ -1088,7 +1088,7 @@
   display: block;
   margin-top: 0.5rem;
   font-size: 1rem;
-  color: #ffb300;
+  color: #d68910;
   font-weight: 600;
   text-align: center;
   letter-spacing: 0.5px;

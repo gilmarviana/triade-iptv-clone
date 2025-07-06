@@ -308,11 +308,13 @@ const JogosDoDia = () => {
 
       <div className="jogos-controls">
         <div className="league-selector">
-          <label>Campeonato:</label>
+          <label htmlFor="league-select">Campeonato:</label>
           <select 
+            id="league-select"
             value={selectedLeague} 
             onChange={(e) => setSelectedLeague(e.target.value)}
             className="league-select"
+            aria-label="Selecionar campeonato"
           >
             {principaisLigas.map(liga => (
               <option key={liga.id} value={liga.id}>
@@ -325,11 +327,13 @@ const JogosDoDia = () => {
         {/* Filtro por campeonato para jogos de hoje/ao vivo */}
         {(selectedLeague === 'hoje' || selectedLeague === 'ao-vivo') && (
           <div className="filter-selector">
-            <label>Filtrar por:</label>
+            <label htmlFor="filter-select">Filtrar por:</label>
             <select 
+              id="filter-select"
               value={filterByLeague} 
               onChange={(e) => setFilterByLeague(e.target.value)}
               className="filter-select"
+              aria-label="Filtrar por campeonato"
             >
               <option value="todos">Todos os Campeonatos</option>
               {ligasParaFiltro.map(liga => (
@@ -344,11 +348,13 @@ const JogosDoDia = () => {
         {/* Filtro por rodada/data para campeonatos específicos */}
         {selectedLeague !== 'hoje' && selectedLeague !== 'ao-vivo' && (
           <div className="round-selector">
-            <label>Período:</label>
+            <label htmlFor="round-select">Período:</label>
             <select 
+              id="round-select"
               value={selectedRound} 
               onChange={(e) => setSelectedRound(e.target.value)}
               className="round-select"
+              aria-label="Selecionar período"
             >
               <option value="proximos">Próximos Jogos (FS)</option>
               <option value="rodada">Por Rodada</option>
@@ -361,12 +367,14 @@ const JogosDoDia = () => {
         {/* Seletor de rodada */}
         {selectedLeague !== 'hoje' && selectedLeague !== 'ao-vivo' && selectedRound === 'rodada' && (
           <div className="rodada-selector">
-            <label>Rodada:</label>
+            <label htmlFor="rodada-select">Rodada:</label>
             <select 
+              id="rodada-select"
               value={selectedRodada} 
               onChange={handleRodadaChange}
               className="rodada-select"
               disabled={loadingRodadas}
+              aria-label="Selecionar rodada"
             >
               {loadingRodadas ? (
                 <option>Carregando rodadas...</option>
@@ -386,22 +394,26 @@ const JogosDoDia = () => {
         {/* Seletor de data para rodada */}
         {selectedLeague !== 'hoje' && selectedLeague !== 'ao-vivo' && selectedRound === 'data' && (
           <div className="round-date-selector">
-            <label>Data:</label>
+            <label htmlFor="round-date-input">Data:</label>
             <input
+              id="round-date-input"
               type="date"
               value={roundDate}
               onChange={handleRoundDateChange}
               className="round-date-input"
+              aria-label="Selecionar data"
             />
           </div>
         )}
 
         <div className="sort-selector">
-          <label>Ordenar por:</label>
+          <label htmlFor="sort-select">Ordenar por:</label>
           <select 
+            id="sort-select"
             value={sortBy} 
             onChange={(e) => setSortBy(e.target.value)}
             className="sort-select"
+            aria-label="Selecionar critério de ordenação"
           >
             <option value="horario">Horário</option>
             <option value="data">Data</option>

@@ -162,7 +162,7 @@
   font-size: 2rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
-  color: #ffb300;
+  color: #d68910;
 }
 
 .movie-original-title {
@@ -239,13 +239,19 @@
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .indicator.active {
@@ -552,7 +558,7 @@
 
 .filter-group label {
   font-weight: 600;
-  color: #ffb300;
+  color: #d68910;
   white-space: nowrap;
 }
 
@@ -646,7 +652,7 @@
 .results-info p {
   margin: 0;
   font-size: 1rem;
-  color: #ffb300;
+  color: #d68910;
   font-weight: 500;
 }
 

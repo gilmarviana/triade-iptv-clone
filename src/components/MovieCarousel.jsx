@@ -269,11 +269,13 @@ const MovieCarousel = () => {
           <div className="filters-controls">
             {/* Tipo de Conteúdo */}
             <div className="filter-group">
-              <label>Tipo:</label>
+              <label htmlFor="content-type-select">Tipo:</label>
               <select 
+                id="content-type-select"
                 value={contentType} 
                 onChange={(e) => setContentType(e.target.value)}
                 className="filter-select"
+                aria-label="Selecionar tipo de conteúdo"
               >
                 <option value="all">Todos</option>
                 <option value="movies">Apenas Filmes</option>
@@ -283,11 +285,13 @@ const MovieCarousel = () => {
 
             {/* Ordenação */}
             <div className="filter-group">
-              <label>Ordenar por:</label>
+              <label htmlFor="sort-select">Ordenar por:</label>
               <select 
+                id="sort-select"
                 value={sortBy} 
                 onChange={(e) => setSortBy(e.target.value)}
                 className="filter-select"
+                aria-label="Selecionar critério de ordenação"
               >
                 <option value="popularity">Popularidade</option>
                 <option value="rating">Avaliação</option>
