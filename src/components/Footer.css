@@ -1,0 +1,16 @@
+.footer {
+  background: #101223;
+  color: #fff;
+  text-align: center;
+  font-size: 1.08rem;
+  margin-top: 2rem;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 12px #181c2f22;
+}
+
+.footer-bottom {
+  padding: 2rem 2rem 1.2rem 2rem;
+  background: #101223;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+} 

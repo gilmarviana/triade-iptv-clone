@@ -1,0 +1,1105 @@
+.jogos-container {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 3rem 1rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.jogos-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+}
+
+.jogos-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.jogos-header h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #ffb300, #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.jogos-header p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Controles de Jogos */
+.jogos-controls {
+  max-width: 1000px;
+  margin: 0 auto 3rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.period-selector, .sort-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.period-selector label, .sort-selector label {
+  font-weight: 600;
+  color: #ffb300;
+  white-space: nowrap;
+}
+
+.period-select, .sort-select {
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.period-select:focus, .sort-select:focus {
+  outline: none;
+  border-color: #ffb300;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.period-select option, .sort-select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+/* Controles de Data */
+.date-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.date-selector label {
+  font-weight: 600;
+  color: #ffb300;
+  white-space: nowrap;
+}
+
+.date-input {
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #ffb300;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.date-display {
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.date-display span {
+  font-weight: 600;
+  color: #ffb300;
+  text-transform: capitalize;
+}
+
+/* Loading e Error States */
+.jogos-loading, .jogos-error, .jogos-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #ffb300;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.jogos-error {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 15px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.retry-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(45deg, #ffb300, #ff6b35);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 179, 0, 0.3);
+}
+
+.jogos-empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.jogos-empty h3 {
+  color: #ffb300;
+  margin-bottom: 0.5rem;
+}
+
+/* Grid de Jogos */
+.jogos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Indicador de jogos ao vivo */
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 15px;
+  color: #ff4444;
+  font-weight: 600;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff4444;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Informações do campeonato */
+.campeonato-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campeonato-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Status com minuto */
+.status .minuto {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Informações do jogo */
+.jogo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.jogo-estadio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.estadio-label {
+  font-size: 0.8rem;
+  color: #ffb300;
+  font-weight: 600;
+}
+
+.estadio-nome {
+  font-size: 0.9rem;
+  color: white;
+  font-weight: 500;
+}
+
+/* Melhorias no card */
+.jogo-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.jogo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffb300, #ff6b35);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.jogo-card:hover::before {
+  opacity: 1;
+}
+
+.jogo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Melhorias no header */
+.jogo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Melhorias nos times */
+.time-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.jogo-card:hover .time-logo {
+  transform: scale(1.1);
+}
+
+/* Melhorias no placar */
+.score-text {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffb300;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.time-score {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffb300;
+  margin-top: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Melhorias no botão */
+.assistir-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(45deg, #ffb300, #ff6b35);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 179, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.assistir-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.assistir-btn:hover::before {
+  left: 100%;
+}
+
+.assistir-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 179, 0, 0.4);
+  color: white;
+}
+
+/* Footer */
+.jogos-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.jogos-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.jogos-info h3 {
+  color: #ffb300;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.jogos-info p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.jogos-info ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.jogos-info li {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.jogos-whatsapp-btn {
+  display: inline-block;
+  padding: 1.2rem 2.5rem;
+  background: linear-gradient(45deg, #25d366, #128c7e);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+}
+
+.jogos-whatsapp-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+  color: white;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .jogos-header h2 {
+    font-size: 2rem;
+  }
+  
+  .jogos-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .period-selector, .sort-selector, .date-selector {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .period-select, .sort-select, .date-input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .live-indicator {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .jogos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+  
+  .jogo-card {
+    padding: 1.5rem;
+  }
+  
+  .jogo-times {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .time-casa, .time-visitante {
+    text-align: center;
+  }
+  
+  .jogo-info {
+    gap: 0.3rem;
+  }
+  
+  .jogo-estadio {
+    padding: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .jogos-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .jogos-header p {
+    font-size: 1rem;
+  }
+  
+  .jogo-card {
+    padding: 1rem;
+  }
+  
+  .time-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .time-nome {
+    font-size: 1rem;
+  }
+  
+  .vs-text {
+    font-size: 1.2rem;
+  }
+  
+  .horario {
+    font-size: 1rem;
+  }
+  
+  .score-text {
+    font-size: 1.5rem;
+  }
+  
+  .time-score {
+    font-size: 1.3rem;
+  }
+} 
+
+/* Seletor de Liga */
+.league-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.league-selector label {
+  font-weight: 600;
+  color: #ffb300;
+  white-space: nowrap;
+}
+
+.league-select {
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 250px;
+}
+
+.league-select:focus {
+  outline: none;
+  border-color: #ffb300;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.league-select option {
+  background: #1a1a2e;
+  color: white;
+  padding: 0.5rem;
+}
+
+/* Informações do Campeonato Selecionado */
+.selected-league-info {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.selected-league-info h3 {
+  color: #ffb300;
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.selected-league-info p {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Melhorias no logo do campeonato */
+.campeonato-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsividade para o seletor de ligas */
+@media (max-width: 768px) {
+  .jogos-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .league-selector, .sort-selector, .date-selector {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .league-select, .sort-select, .date-input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .live-indicator {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .selected-league-info h3 {
+    font-size: 1.5rem;
+  }
+  
+  .selected-league-info p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .league-select {
+    min-width: 200px;
+    font-size: 0.9rem;
+  }
+  
+  .selected-league-info {
+    padding: 1rem;
+  }
+  
+  .selected-league-info h3 {
+    font-size: 1.3rem;
+  }
+} 
+
+/* Estilos para Paginação */
+.jogos-info-summary {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.jogos-info-summary p {
+  margin: 0;
+  font-weight: 600;
+  color: #ffb300;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.pagination-btn {
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(45deg, #ffb300, #ff6b35);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 179, 0, 0.3);
+}
+
+.pagination-btn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-number {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-number:hover {
+  background: rgba(255, 179, 0, 0.2);
+  border-color: #ffb300;
+  transform: scale(1.1);
+}
+
+.pagination-number.active {
+  background: linear-gradient(45deg, #ffb300, #ff6b35);
+  border-color: #ffb300;
+  color: white;
+  box-shadow: 0 5px 15px rgba(255, 179, 0, 0.3);
+}
+
+.pagination-ellipsis {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  padding: 0 0.5rem;
+}
+
+/* Estilos para Filtros Adicionais */
+.filter-selector, .round-selector, .round-date-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-selector label, .round-selector label, .round-date-selector label {
+  font-weight: 600;
+  color: #ffb300;
+  white-space: nowrap;
+}
+
+.filter-select, .round-select, .round-date-input {
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.filter-select:focus, .round-select:focus, .round-date-input:focus {
+  outline: none;
+  border-color: #ffb300;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.filter-select option, .round-select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+/* Responsividade da Paginação */
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination-numbers {
+    order: 2;
+  }
+  
+  .pagination-btn {
+    order: 1;
+    min-width: 100px;
+  }
+  
+  .pagination-number {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  
+  .filter-selector, .round-selector, .round-date-selector {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .filter-select, .round-select, .round-date-input {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    padding: 1rem;
+  }
+  
+  .pagination-numbers {
+    gap: 0.3rem;
+  }
+  
+  .pagination-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  .pagination-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .filter-select, .round-select, .round-date-input {
+    min-width: 200px;
+    font-size: 0.9rem;
+  }
+} 
+
+/* Estilos para Próximo Jogo */
+.proximo-jogo-section {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(255, 179, 0, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 179, 0, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 2;
+}
+
+.proximo-jogo-section h3 {
+  text-align: center;
+  color: #ffb300;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.proximo-jogo-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.proximo-jogo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(255, 179, 0, 0.2);
+}
+
+.proximo-jogo-btn {
+  background: linear-gradient(45deg, #ffb300, #ff6b35) !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  padding: 1rem 2rem !important;
+}
+
+.proximo-jogo-btn:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 15px 30px rgba(255, 179, 0, 0.4) !important;
+}
+
+.data-proximo {
+  font-size: 0.9rem;
+  color: #ffb300;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Estilos para Seletor de Rodada */
+.rodada-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rodada-selector label {
+  font-weight: 600;
+  color: #ffb300;
+  white-space: nowrap;
+}
+
+.rodada-select {
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.rodada-select:focus {
+  outline: none;
+  border-color: #ffb300;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.rodada-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rodada-select option {
+  background: #1a1a2e;
+  color: white;
+}
+
+/* Responsividade para Próximo Jogo */
+@media (max-width: 768px) {
+  .proximo-jogo-section {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .proximo-jogo-section h3 {
+    font-size: 1.5rem;
+  }
+  
+  .proximo-jogo-card {
+    padding: 1rem;
+  }
+  
+  .rodada-selector {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .rodada-select {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .proximo-jogo-section {
+    padding: 1rem;
+  }
+  
+  .proximo-jogo-section h3 {
+    font-size: 1.3rem;
+  }
+  
+  .proximo-jogo-card {
+    padding: 0.8rem;
+  }
+  
+  .proximo-jogo-btn {
+    padding: 0.8rem 1.5rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .rodada-select {
+    min-width: 180px;
+    font-size: 0.9rem;
+  }
+} 
+
+/* Centralização e alinhamento do card de jogo */
+.placar-centralizado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.score-bloco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+}
+
+.hifen {
+  margin: 0 0.2rem;
+}
+
+.jogo-info.alinhado {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.2rem;
+}
+
+.jogo-canal, .jogo-estadio {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.jogo-actions.centralizado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.2rem;
+}
+
+.estadio-abaixo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.2rem;
+  padding: 0.5rem 0;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 1rem;
+  color: #ffb300;
+  font-weight: 600;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .placar-centralizado {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .jogo-info.alinhado {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+} 
+
+.data-partida {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #ffb300;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.5px;
+} 
+
+.time-nome {
+  max-width: 90px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
+} 

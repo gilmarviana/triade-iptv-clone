@@ -1,0 +1,210 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://iptvbarato.site/sitemap.xml
+
+# Crawl-delay para evitar sobrecarga do servidor
+Crawl-delay: 1
+
+# Permitir indexação de todas as páginas principais
+Allow: /#inicio
+Allow: /#planos
+Allow: /#listas
+Allow: /#jogos
+Allow: /#filmes-em-cartaz
+Allow: /#faq
+Allow: /#contato
+
+# Permitir indexação de recursos importantes
+Allow: /manifest.json
+Allow: /favicon.ico
+Allow: /logo192.png
+Allow: /logo512.png
+
+# Bloquear arquivos desnecessários
+Disallow: /static/
+Disallow: /_next/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cache/
+Disallow: /logs/
+Disallow: /backup/
+Disallow: /test/
+Disallow: /dev/
+Disallow: /staging/
+
+# Bloquear extensões de arquivo desnecessárias
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.txt$
+Disallow: /*.log$
+Disallow: /*.sql$
+Disallow: /*.bak$
+Disallow: /*.tmp$
+Disallow: /*.temp$
+
+# Permitir Googlebot e Bingbot com configurações específicas
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# Bloquear bots maliciosos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: Ezooms
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: Sogou
+Disallow: /
+
+User-agent: YoudaoBot
+Disallow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+# Configurações específicas para IPTV
+# Permitir indexação de conteúdo de futebol e filmes
+Allow: /futebol-iptv
+Allow: /filmes-iptv
+Allow: /series-iptv
+Allow: /canais-iptv
+Allow: /planos-iptv
+Allow: /teste-gratis-iptv
+
+# Permitir indexação de dispositivos compatíveis
+Allow: /smart-tv-iptv
+Allow: /android-iptv
+Allow: /ios-iptv
+Allow: /pc-iptv
+Allow: /tv-box-iptv
+Allow: /chromecast-iptv
+Allow: /fire-stick-iptv
+Allow: /roku-iptv
+Allow: /xbox-iptv
+Allow: /playstation-iptv
+Allow: /apple-tv-iptv
+
+# Permitir indexação de marcas de TV
+Allow: /samsung-tv-iptv
+Allow: /lg-tv-iptv
+Allow: /sony-tv-iptv
+Allow: /philips-tv-iptv
+Allow: /panasonic-tv-iptv
+Allow: /sharp-tv-iptv
+Allow: /toshiba-tv-iptv
+Allow: /hisense-tv-iptv
+Allow: /tcl-tv-iptv
+Allow: /xiaomi-tv-iptv
+Allow: /motorola-tv-iptv
+Allow: /aoc-tv-iptv
+Allow: /multilaser-tv-iptv
+Allow: /positivo-tv-iptv
+Allow: /cce-tv-iptv
+Allow: /gradiente-tv-iptv
+Allow: /semp-tv-iptv
+Allow: /philco-tv-iptv
+Allow: /proscan-tv-iptv
+Allow: /westinghouse-tv-iptv
+Allow: /curtis-tv-iptv
+Allow: /funai-tv-iptv
+Allow: /sanyo-tv-iptv
+Allow: /jvc-tv-iptv
+Allow: /akai-tv-iptv
+Allow: /daewoo-tv-iptv
+Allow: /goldstar-tv-iptv
+Allow: /hitachi-tv-iptv
+Allow: /mitsubishi-tv-iptv
+Allow: /nec-tv-iptv
+Allow: /pioneer-tv-iptv
+Allow: /sansui-tv-iptv
+Allow: /seiki-tv-iptv
+Allow: /vizio-tv-iptv
+Allow: /insignia-tv-iptv
+Allow: /element-tv-iptv
+Allow: /sceptre-tv-iptv
+Allow: /onn-tv-iptv
+
+# Permitir indexação de TVs Roku
+Allow: /tcl-roku-tv-iptv
+Allow: /sharp-roku-tv-iptv
+Allow: /hisense-roku-tv-iptv
+
+# Permitir indexação de TVs Android
+Allow: /tcl-android-tv-iptv
+Allow: /sony-android-tv-iptv
+Allow: /philips-android-tv-iptv
+Allow: /sharp-android-tv-iptv
+Allow: /hisense-android-tv-iptv
+Allow: /xiaomi-android-tv-iptv
+Allow: /motorola-android-tv-iptv
+Allow: /aoc-android-tv-iptv
+Allow: /multilaser-android-tv-iptv
+Allow: /positivo-android-tv-iptv
+Allow: /cce-android-tv-iptv
+Allow: /gradiente-android-tv-iptv
+Allow: /semp-android-tv-iptv
+Allow: /philco-android-tv-iptv
+Allow: /proscan-android-tv-iptv
+Allow: /westinghouse-android-tv-iptv
+Allow: /curtis-android-tv-iptv
+Allow: /funai-android-tv-iptv
+Allow: /sanyo-android-tv-iptv
+Allow: /jvc-android-tv-iptv
+Allow: /akai-android-tv-iptv
+Allow: /daewoo-android-tv-iptv
+Allow: /goldstar-android-tv-iptv
+Allow: /hitachi-android-tv-iptv
+Allow: /mitsubishi-android-tv-iptv
+Allow: /nec-android-tv-iptv
+Allow: /pioneer-android-tv-iptv
+Allow: /sansui-android-tv-iptv
+Allow: /seiki-android-tv-iptv
+Allow: /vizio-android-tv-iptv
+Allow: /insignia-android-tv-iptv
+Allow: /element-android-tv-iptv
+Allow: /sceptre-android-tv-iptv
+Allow: /onn-android-tv-iptv
