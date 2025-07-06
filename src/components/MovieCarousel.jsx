@@ -336,6 +336,8 @@ const MovieCarousel = () => {
                   <img
                     src={current?.poster_path || 'https://via.placeholder.com/300x450/666/fff?text=Imagem'}
                     alt={`Poster do ${current?._type === 'movie' ? 'filme' : 'seriado'} ${current?.title || 'Título'} - Avaliação ${current?.vote_average?.toFixed(1) || 'N/A'}`}
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     onError={e => {
                       e.target.src = 'https://via.placeholder.com/300x450/666/fff?text=Imagem';
                     }}

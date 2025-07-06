@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   fetchJogosDoDia, 
   fetchJogosPorLiga, 
@@ -8,6 +8,7 @@ import {
   fetchRodadasLiga as fetchRodadasLigaAPI,
   fetchRodadaAtualLiga
 } from '../services/jogosApi';
+import { debounce, throttle } from '../utils/performance';
 import './JogosDoDia.css';
 
 const JogosDoDia = () => {
@@ -51,17 +52,17 @@ const JogosDoDia = () => {
   const ligasParaFiltro = principaisLigas.filter(liga => liga.id !== 'hoje' && liga.id !== 'ao-vivo');
 
   useEffect(() => {
-    fetchJogos();
+    debouncedFetchJogos();
     setCurrentPage(1); // Reset para primeira página quando mudar filtros
-  }, [selectedDate, selectedLeague, sortBy, filterByLeague, selectedRound, roundDate, selectedRodada]);
+  }, [selectedDate, selectedLeague, sortBy, filterByLeague, selectedRound, roundDate, selectedRodada, debouncedFetchJogos]);
 
   // Buscar jogos automaticamente quando selecionar uma rodada
   useEffect(() => {
     if (selectedRound === 'rodada' && selectedRodada && selectedLeague !== 'hoje' && selectedLeague !== 'ao-vivo') {
       console.log('Rodada selecionada:', selectedRodada);
-      fetchJogos();
+      debouncedFetchJogos();
     }
-  }, [selectedRodada, selectedRound]);
+  }, [selectedRodada, selectedRound, debouncedFetchJogos]);
 
   // Buscar próximo jogo e rodadas quando selecionar um campeonato específico
   useEffect(() => {
@@ -86,11 +87,11 @@ const JogosDoDia = () => {
     let interval;
     if (autoRefresh && selectedLeague === 'ao-vivo') {
       interval = setInterval(() => {
-        fetchJogos();
+        debouncedFetchJogos();
       }, 30000); // Atualiza a cada 30 segundos
     }
     return () => clearInterval(interval);
-  }, [autoRefresh, selectedLeague]);
+  }, [autoRefresh, selectedLeague, debouncedFetchJogos]);
 
   const fetchProximoJogo = async () => {
     try {
@@ -156,7 +157,7 @@ const JogosDoDia = () => {
     }
   };
 
-  const fetchJogos = async () => {
+  const fetchJogos = useCallback(async () => {
     if (!selectedLeague) return;
     
     setLoading(true);
@@ -189,7 +190,13 @@ const JogosDoDia = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedLeague, selectedRound, roundDate, selectedRodada]);
+
+  // Versão otimizada com debounce para evitar chamadas excessivas
+  const debouncedFetchJogos = useCallback(
+    debounce(fetchJogos, 300),
+    [fetchJogos]
+  );
 
   const sortJogos = (jogos, sortType) => {
     switch (sortType) {
@@ -472,6 +479,7 @@ const JogosDoDia = () => {
                   src={proximoJogo.logoCampeonato} 
                   alt={`Logo do campeonato ${proximoJogo.campeonato}`}
                   className="campeonato-logo"
+                  loading="lazy"
                   onError={(e) => {
                     e.target.style.display = 'none';
                   }}
@@ -492,6 +500,7 @@ const JogosDoDia = () => {
                   src={proximoJogo.logoCasa} 
                   alt={`Logo do time ${proximoJogo.timeCasa}`}
                   className="time-logo"
+                  loading="lazy"
                   onError={(e) => {
                     e.target.src = `https://via.placeholder.com/40x40/666/fff?text=${proximoJogo.timeCasa.substring(0, 3).toUpperCase()}`;
                   }}
@@ -511,6 +520,7 @@ const JogosDoDia = () => {
                   src={proximoJogo.logoVisitante} 
                   alt={`Logo do time ${proximoJogo.timeVisitante}`}
                   className="time-logo"
+                  loading="lazy"
                   onError={(e) => {
                     e.target.src = `https://via.placeholder.com/40x40/666/fff?text=${proximoJogo.timeVisitante.substring(0, 3).toUpperCase()}`;
                   }}
@@ -542,7 +552,7 @@ const JogosDoDia = () => {
       {error && (
         <div className="jogos-error">
           <p>{error}</p>
-          <button onClick={fetchJogos} className="retry-btn">
+          <button onClick={debouncedFetchJogos} className="retry-btn">
             Tentar Novamente
           </button>
         </div>
@@ -577,6 +587,7 @@ const JogosDoDia = () => {
                     src={jogo.logoCampeonato} 
                     alt={`Logo do campeonato ${jogo.campeonato}`}
                     className="campeonato-logo"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
@@ -599,6 +610,7 @@ const JogosDoDia = () => {
                     src={jogo.logoCasa} 
                     alt={`Logo do time ${jogo.timeCasa}`}
                     className="time-logo"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.src = `https://via.placeholder.com/40x40/666/fff?text=${jogo.timeCasa.substring(0, 3).toUpperCase()}`;
                     }}
@@ -625,6 +637,7 @@ const JogosDoDia = () => {
                     src={jogo.logoVisitante} 
                     alt={`Logo do time ${jogo.timeVisitante}`}
                     className="time-logo"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.src = `https://via.placeholder.com/40x40/666/fff?text=${jogo.timeVisitante.substring(0, 3).toUpperCase()}`;
                     }}
