@@ -1,8 +1,9 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Planos from './components/Planos';
 import Listas from './components/Listas';
+import { initPerformanceMonitoring } from './utils/performance';
 import './App.css';
 
 // Lazy loading para componentes pesados
@@ -33,6 +34,11 @@ const LoadingSpinner = () => (
 );
 
 function App() {
+  // Initialize performance monitoring
+  useEffect(() => {
+    initPerformanceMonitoring();
+  }, []);
+
   return (
     <>
       <Header />

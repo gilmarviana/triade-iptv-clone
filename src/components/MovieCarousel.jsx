@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './MovieCarousel.css';
+import OptimizedImage from './OptimizedImage';
 import { 
   fetchNowPlaying, 
   fetchPopularMovies, 
@@ -333,14 +334,14 @@ const MovieCarousel = () => {
             <div className="carousel-slide">
               <div className="movie-card">
                 <div className="movie-poster">
-                  <img
+                  <OptimizedImage
                     src={current?.poster_path || 'https://via.placeholder.com/300x450/666/fff?text=Imagem'}
                     alt={`Poster do ${current?._type === 'movie' ? 'filme' : 'seriado'} ${current?.title || 'Título'} - Avaliação ${current?.vote_average?.toFixed(1) || 'N/A'}`}
-                    loading="lazy"
+                    className="movie-poster-img"
+                    width={300}
+                    height={450}
+                    priority={true}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onError={e => {
-                      e.target.src = 'https://via.placeholder.com/300x450/666/fff?text=Imagem';
-                    }}
                   />
                   <div className="movie-overlay">
                     <div className="movie-rating">
