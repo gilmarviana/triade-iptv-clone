@@ -7,9 +7,9 @@
   margin-bottom: 2rem;
 }
 .contato__info a {
-  color: #d68910;
-  text-decoration: none;
-  font-weight: 500;
+  color: #181c2f;
+  text-decoration: underline;
+  font-weight: 600;
 }
 .contato__form {
   display: flex;

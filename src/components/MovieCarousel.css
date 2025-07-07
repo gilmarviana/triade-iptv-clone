@@ -264,20 +264,21 @@
 }
 
 .indicator {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
-  margin: 0 4px;
+  margin: 0 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
   will-change: transform;
+  outline: none;
 }
 
 .indicator.active {
@@ -287,6 +288,11 @@
 
 .indicator:hover {
   background: rgba(255, 179, 0, 0.6);
+}
+
+.indicator:focus {
+  outline: 3px solid #ffb300;
+  outline-offset: 2px;
 }
 
 .movie-carousel-footer {
