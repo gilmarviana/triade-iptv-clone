@@ -1,10 +1,17 @@
 import React from 'react';
 import './Header.css';
+import OptimizedLogo from './OptimizedLogo';
 
 const Header = () => (
   <header className="header">
     <div className="header__logo">
-      <img src="/logo-iptv.png" alt="Logo Barato IPTV" className="header__logo-img" />
+      <OptimizedLogo 
+        className="header__logo-img" 
+        alt="Logo Barato IPTV"
+        width={70}
+        height={78}
+        priority={true}
+      />
       <span className="header__logo-text">Logo Barato IPTV</span>
     </div>
     <nav className="header__nav">

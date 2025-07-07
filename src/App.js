@@ -15,15 +15,19 @@ import GTMLoader from './components/GTMLoader';
 // Importar utilitários de performance
 import { initAnalyticsOnInteraction } from './utils/scriptLoader';
 import { initPerformanceMonitoring } from './utils/performance';
-import { initCriticalCSSOptimizations } from './utils/criticalCSS';
+import { initUltraOptimizations } from './utils/ultraOptimizer';
+import { optimizeAllImages } from './utils/imageOptimizer';
 
 function App() {
   useEffect(() => {
     // Inicializar monitoramento de performance
     initPerformanceMonitoring();
     
-    // Inicializar otimizações de CSS crítico
-    initCriticalCSSOptimizations();
+    // Inicializar otimizações ultra-agressivas
+    initUltraOptimizations();
+    
+    // Otimizar imagens
+    optimizeAllImages();
     
     // Lazy load de componentes não críticos
     const loadNonCriticalComponents = () => {

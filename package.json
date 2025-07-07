@@ -17,6 +17,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "sharp": "^0.34.2",
     "terser-webpack-plugin": "^5.3.14",
     "webpack-bundle-analyzer": "^4.10.2"
   },
