@@ -82,7 +82,7 @@ export function loadGoogleAnalytics(trackingId) {
 
 /**
  * Carrega Google Tag Manager de forma otimizada
- * @param {string} containerId - ID do container GTM
+ * @param {string} containerId - ID do container GTM (ex: GTM-5FJ948RV)
  * @returns {Promise} Promise que resolve quando o GTM é carregado
  */
 export function loadGoogleTagManager(containerId) {

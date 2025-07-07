@@ -10,27 +10,16 @@ import FAQ from './components/FAQ';
 import Contato from './components/Contato';
 import Footer from './components/Footer';
 import WhatsappFloat from './components/WhatsappFloat';
+import GTMLoader from './components/GTMLoader';
 
 // Importar utilitários de performance
 import { initAnalyticsOnInteraction } from './utils/scriptLoader';
 import { initPerformanceMonitoring } from './utils/performance';
-import { initWebVitals } from './utils/analytics';
 
 function App() {
   useEffect(() => {
     // Inicializar monitoramento de performance
     initPerformanceMonitoring();
-    
-    // Inicializar Web Vitals
-    initWebVitals();
-    
-    // Carregar analytics após interação do usuário
-    initAnalyticsOnInteraction({
-      gaTrackingId: 'G-XXXXXXXXXX', // Substitua pelo seu ID real
-      gtmContainerId: 'GTM-XXXXXXXX', // Substitua pelo seu ID real
-      delay: 1000,
-      timeout: 15000
-    });
     
     // Preload de recursos críticos
     const criticalResources = [
@@ -92,6 +81,7 @@ function App() {
       </main>
       <Footer />
       <WhatsappFloat />
+      <GTMLoader />
     </div>
   );
 }
