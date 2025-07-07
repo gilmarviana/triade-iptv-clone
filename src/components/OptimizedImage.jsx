@@ -16,16 +16,27 @@ const OptimizedImage = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Função para gerar URLs otimizadas
-  const getOptimizedSrc = (originalSrc, format = 'webp') => {
-    if (!originalSrc || originalSrc.startsWith('data:') || originalSrc.startsWith('https://via.placeholder.com')) {
+  const getOptimizedSrc = (originalSrc) => {
+    if (!originalSrc || originalSrc.startsWith('data:') || originalSrc.startsWith('/images/placeholder-poster.png')) {
       return originalSrc;
     }
-    // Se vier só o caminho, monta a URL do TMDB
+    // Se vier só o caminho, monta a URL do TMDB com w500
     if (originalSrc.startsWith('/')) {
       return `https://image.tmdb.org/t/p/w500${originalSrc}`;
     }
-    // Se já é uma URL do TMDB, apenas retorna
+    // Se já é uma URL do TMDB, força w500
     if (originalSrc.includes('image.tmdb.org')) {
+      const match = originalSrc.match(/\/t\/p\/(w\d+)(.+)/);
+      if (match) {
+        const path = match[2];
+        return `https://image.tmdb.org/t/p/w500${path}`;
+      }
+      // Se não bater, tenta pegar só o path
+      const pathMatch = originalSrc.match(/\/t\/p\/(.+)/);
+      if (pathMatch) {
+        const path = pathMatch[1].replace(/^w\d+/, '');
+        return `https://image.tmdb.org/t/p/w500/${path}`;
+      }
       return originalSrc;
     }
     return originalSrc;
@@ -40,13 +51,11 @@ const OptimizedImage = ({
       return `https://image.tmdb.org/t/p/w300${originalSrc} 300w, https://image.tmdb.org/t/p/w500${originalSrc} 500w, https://image.tmdb.org/t/p/w780${originalSrc} 780w`;
     }
     if (originalSrc.includes('image.tmdb.org')) {
-      // Extrair apenas o caminho após /t/p/ e garantir que só um tamanho seja usado
       const match = originalSrc.match(/\/t\/p\/(w\d+)(.+)/);
       if (match) {
         const path = match[2];
         return `https://image.tmdb.org/t/p/w300${path} 300w, https://image.tmdb.org/t/p/w500${path} 500w, https://image.tmdb.org/t/p/w780${path} 780w`;
       }
-      // Se não bater, tenta pegar só o path
       const pathMatch = originalSrc.match(/\/t\/p\/(.+)/);
       if (pathMatch) {
         const path = pathMatch[1].replace(/^w\d+/, '');
