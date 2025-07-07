@@ -65,6 +65,13 @@ function App() {
     // Carregar componentes não críticos após o carregamento inicial
     setTimeout(loadNonCriticalComponents, 2000);
     
+    // Carregar analytics após interação do usuário
+    initAnalyticsOnInteraction({
+      gaTrackingId: 'G-349785401', // ID real do Google Analytics
+      gtmContainerId: 'GTM-5FJ948RV', // ID real do GTM
+      delay: 1000,
+      timeout: 15000
+    });
   }, []);
 
   return (
