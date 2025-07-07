@@ -6,13 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffb300" />
     
+    <!-- CSS Crítico Inline -->
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        background: #f7f7fa;
+        color: #181c2f;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 3vw;
+        background: #101223;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      }
+      .header__logo-img {
+        height: 50px;
+        width: auto;
+        max-width: 200px;
+        object-fit: contain;
+      }
+      .header__nav {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .header__nav a {
+        color: #fff;
+        font-size: 1.08rem;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        transition: color 0.2s, background 0.2s;
+      }
+      .header__nav a:hover {
+        color: #ffb300;
+        background: #23243a;
+      }
+      .header__teste-btn {
+        background: linear-gradient(90deg, #ffb300 60%, #ff9800 100%);
+        color: #181c2f;
+        padding: 0.7rem 1.5rem;
+        border-radius: 6px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 1.08rem;
+        box-shadow: 0 2px 8px #ffb30033;
+        transition: background 0.2s, color 0.2s;
+        margin-left: 1.5rem;
+      }
+      .header__teste-btn:hover {
+        background: #ff9800;
+        color: #fff;
+      }
+      @media (max-width: 700px) {
+        .header {
+          flex-direction: column;
+          gap: 0.7rem;
+          padding: 1rem 2vw;
+        }
+        .header__nav {
+          gap: 0.7rem;
+        }
+        .header__logo-img {
+          height: 40px;
+          max-width: 150px;
+        }
+        .header__teste-btn {
+          margin-left: 0;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      @media (max-width: 480px) {
+        .header__logo-img {
+          height: 35px;
+          max-width: 120px;
+        }
+        .header__nav {
+          gap: 0.5rem;
+        }
+        .header__nav a {
+          font-size: 0.9rem;
+          padding: 0.1rem 0.3rem;
+        }
+      }
+    </style>
+    
     <!-- CSS Crítico Ultra-Otimizado -->
     <style>
       /* CSS crítico ultra-otimizado para renderização imediata */
       body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#f7f7fa;color:#181c2f;line-height:1.6}
       #root{min-height:100vh;display:flex;flex-direction:column}
-      .header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3vw;background:#101223;color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
-      .header__logo-img{height:50px;width:auto;max-width:200px;object-fit:contain}
       .hero{background:linear-gradient(120deg,#181c2f 60%,#ffb300 100%);color:#fff;padding:5rem 2rem 4rem 2rem;text-align:center;position:relative;overflow:hidden;min-height:350px;box-shadow:0 4px 24px #181c2f22}
       .hero h1{font-size:2.8rem;font-weight:900;margin-bottom:1.2rem;letter-spacing:1px;text-shadow:1px 2px 12px #00000055}
       .hero p{font-size:1.25rem;margin-bottom:2.2rem;font-weight:500;text-shadow:0 1px 8px #00000033}
