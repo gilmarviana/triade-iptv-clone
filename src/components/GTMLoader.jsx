@@ -20,21 +20,21 @@ const GTMLoader = ({ containerId = 'GTM-5FJ948RV' }) => {
         document.removeEventListener(event, loadGTM);
       });
 
-      // Carregar GTM com delay
+      // Carregar GTM com delay maior para melhor performance
       setTimeout(() => {
         loadGoogleTagManager(containerId).catch(error => {
           console.warn('Failed to load GTM:', error);
         });
-      }, 1000);
+      }, 3000); // Aumentado para 3 segundos
     };
 
     // Adicionar listeners para interação
     events.forEach(event => {
-      document.addEventListener(event, loadGTM, { once: true });
+      document.addEventListener(event, loadGTM, { once: true, passive: true });
     });
 
-    // Fallback: carregar após 15 segundos
-    setTimeout(loadGTM, 15000);
+    // Fallback: carregar após 30 segundos (aumentado)
+    setTimeout(loadGTM, 30000);
 
     // Cleanup
     return () => {

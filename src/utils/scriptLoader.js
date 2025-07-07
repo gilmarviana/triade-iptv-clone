@@ -87,21 +87,45 @@ export function loadGoogleAnalytics(trackingId) {
  */
 export function loadGoogleTagManager(containerId) {
   return new Promise((resolve) => {
+    // Verificar se já foi carregado
+    if (document.getElementById('gtm-script')) {
+      resolve();
+      return;
+    }
+
     // Inicializar dataLayer
     window.dataLayer = window.dataLayer || [];
     
-    // Função GTM
+    // Função GTM com carregamento otimizado
     (function(w,d,s,l,i){
       w[l]=w[l]||[];
       w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
       var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
       j.async=true;
+      j.defer=true;
+      j.id='gtm-script';
       j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      
+      // Adicionar timeout para evitar carregamento infinito
+      const timeoutId = setTimeout(() => {
+        console.warn('GTM load timeout');
+        resolve();
+      }, 5000);
+      
+      j.onload = () => {
+        clearTimeout(timeoutId);
+        resolve();
+      };
+      
+      j.onerror = () => {
+        clearTimeout(timeoutId);
+        console.warn('GTM load failed');
+        resolve();
+      };
+      
       f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer',containerId);
-    
-    resolve();
   });
 }
 
@@ -113,8 +137,8 @@ export function initAnalyticsOnInteraction(config = {}) {
   const {
     gaTrackingId = null,
     gtmContainerId = null,
-    delay = 1000,
-    timeout = 15000
+    delay = 2000, // Aumentado para 2 segundos
+    timeout = 30000 // Aumentado para 30 segundos
   } = config;
 
   // Verificar se já foi inicializado
@@ -133,7 +157,7 @@ export function initAnalyticsOnInteraction(config = {}) {
       document.removeEventListener(event, loadAnalytics);
     });
 
-    // Carregar analytics com delay
+    // Carregar analytics com delay maior para melhor performance
     setTimeout(async () => {
       try {
         if (gaTrackingId) {
@@ -143,7 +167,7 @@ export function initAnalyticsOnInteraction(config = {}) {
         if (gtmContainerId) {
           setTimeout(() => {
             loadGoogleTagManager(gtmContainerId);
-          }, 2000);
+          }, 5000); // Aumentado para 5 segundos
         }
       } catch (error) {
         console.warn('Failed to load analytics:', error);
