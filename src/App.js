@@ -15,30 +15,15 @@ import GTMLoader from './components/GTMLoader';
 // Importar utilitários de performance
 import { initAnalyticsOnInteraction } from './utils/scriptLoader';
 import { initPerformanceMonitoring } from './utils/performance';
+import { initCriticalCSSOptimizations } from './utils/criticalCSS';
 
 function App() {
   useEffect(() => {
     // Inicializar monitoramento de performance
     initPerformanceMonitoring();
     
-    // Preload de recursos críticos
-    const criticalResources = [
-      { href: '/logo-iptv.png', as: 'image', type: 'image/png' },
-      { href: '/static/css/main.css', as: 'style' },
-      { href: '/static/js/main.js', as: 'script' }
-    ];
-    
-    // Adicionar preload hints dinamicamente
-    criticalResources.forEach(resource => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.href = resource.href;
-      link.as = resource.as;
-      if (resource.type) {
-        link.type = resource.type;
-      }
-      document.head.appendChild(link);
-    });
+    // Inicializar otimizações de CSS crítico
+    initCriticalCSSOptimizations();
     
     // Lazy load de componentes não críticos
     const loadNonCriticalComponents = () => {

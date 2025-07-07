@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffb300" />
     
-    <!-- CSS Crítico Inline para evitar render blocking -->
+    <!-- CSS Crítico Inline Otimizado -->
     <style>
-      /* CSS crítico para renderização inicial */
+      /* CSS crítico otimizado para renderização inicial */
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -16,32 +16,17 @@
         -moz-osx-font-smoothing: grayscale;
         background: #f7f7fa;
         color: #181c2f;
+        line-height: 1.6;
       }
       
-      /* Loading spinner crítico */
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      
-      .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #d68910;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto;
-      }
-      
-      /* Layout crítico */
+      /* Layout crítico otimizado */
       #root {
         min-height: 100vh;
         display: flex;
         flex-direction: column;
       }
       
-      /* Header crítico */
+      /* Header crítico otimizado */
       .header {
         display: flex;
         align-items: center;
@@ -62,7 +47,7 @@
         object-fit: contain;
       }
       
-      /* Hero crítico */
+      /* Hero crítico otimizado */
       .hero {
         background: linear-gradient(120deg, #181c2f 60%, #ffb300 100%);
         color: #fff;
@@ -103,7 +88,23 @@
         display: inline-block;
       }
       
-      /* Responsividade crítica */
+      /* Loading spinner crítico otimizado */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #d68910;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+      
+      /* Responsividade crítica otimizada */
       @media (max-width: 700px) {
         .hero {
           padding: 2.5rem 1rem 2rem 1rem;
@@ -122,22 +123,39 @@
           padding: 1rem;
         }
       }
+      
+      /* Otimizações de performance */
+      * {
+        box-sizing: border-box;
+      }
+      
+      /* Preload de fontes críticas */
+      @font-face {
+        font-family: 'Montserrat';
+        font-display: swap;
+        src: url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
+      }
     </style>
     
     <!-- Preload recursos críticos -->
     <link rel="preload" href="%PUBLIC_URL%/logo-iptv.png" as="image" type="image/png">
     
-    <!-- Otimização de fontes - carregamento não-bloqueante -->
+    <!-- Otimização de fontes - carregamento crítico otimizado -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.gstatic.com/s/montserrat/v25/JTUSjIg1_i6t8kCHKm459Wlhyw.ttf" as="font" type="font/woff2" crossorigin>
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     </noscript>
     
-    <!-- CSS não-crítico carregado de forma não-bloqueante -->
+    <!-- CSS não-crítico carregado de forma otimizada -->
     <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css"></noscript>
+    
+    <!-- Preload de recursos críticos adicionais -->
+    <link rel="preload" href="%PUBLIC_URL%/static/js/main.js" as="script">
+    <link rel="preload" href="%PUBLIC_URL%/static/js/vendors.js" as="script">
     
     <meta name="description" content="IPTV Barato - A melhor lista IPTV do Brasil! Planos a partir de R$10,00/mês. +30.000 canais ao vivo, filmes, séries, futebol, estabilidade, suporte 24h e teste grátis. Assista em qualquer dispositivo: Smart TV, TV Box, Android, iOS, PC." />
     <meta name="keywords" content="IPTV, IPTV Brasil, IPTV Barato, canais ao vivo, filmes online, séries online, futebol ao vivo, lista IPTV, TV online, TV por internet, teste IPTV grátis, IPTV estável, IPTV premium, suporte 24h, 4K, FHD, HD, TV Box, Smart TV, Chromecast, programação EPG, conteúdo atualizado, promoções IPTV, planos baratos, R$10,00, R$79,00, R$99,00, Mundial de Clubes, Premier League, Champions League, Brasileirão, Libertadores, Netflix, HBO Max, Disney+, Prime Video, Telecine, Sportv, ESPN, canais adultos, rádios online, IPTV sem fidelidade, IPTV com qualidade, melhor IPTV 2024, IPTV confiável, IPTV rápido, IPTV sem travamentos, IPTV com EPG, IPTV multi tela, IPTV para Smart TV, IPTV para Android, IPTV para iOS, IPTV para PC, IPTV para TV Box, IPTV para Chromecast, IPTV para Fire Stick, IPTV para Roku, IPTV para Xbox, IPTV para PlayStation, IPTV para Apple TV, IPTV para Samsung TV, IPTV para LG TV, IPTV para Sony TV, IPTV para Philips TV, IPTV para Panasonic TV, IPTV para Sharp TV, IPTV para Toshiba TV, IPTV para Hisense TV, IPTV para TCL TV, IPTV para Xiaomi TV, IPTV para Motorola TV, IPTV para AOC TV, IPTV para Multilaser TV, IPTV para Positivo TV, IPTV para CCE TV, IPTV para Gradiente TV, IPTV para Semp TV, IPTV para Philco TV, IPTV para ProScan TV, IPTV para Westinghouse TV, IPTV para Curtis TV, IPTV para Funai TV, IPTV para Sanyo TV, IPTV para JVC TV, IPTV para Akai TV, IPTV para Daewoo TV, IPTV para Goldstar TV, IPTV para Hitachi TV, IPTV para Mitsubishi TV, IPTV para NEC TV, IPTV para Pioneer TV, IPTV para Sansui TV, IPTV para Seiki TV, IPTV para Vizio TV, IPTV para Insignia TV, IPTV para Element TV, IPTV para Sceptre TV, IPTV para Onn TV, IPTV para TCL Roku TV, IPTV para Sharp Roku TV, IPTV para Hisense Roku TV, IPTV para TCL Android TV, IPTV para Sony Android TV, IPTV para Philips Android TV, IPTV para Sharp Android TV, IPTV para Hisense Android TV, IPTV para Xiaomi Android TV, IPTV para Motorola Android TV, IPTV para AOC Android TV, IPTV para Multilaser Android TV, IPTV para Positivo Android TV, IPTV para CCE Android TV, IPTV para Gradiente Android TV, IPTV para Semp Android TV, IPTV para Philco Android TV, IPTV para ProScan Android TV, IPTV para Westinghouse Android TV, IPTV para Curtis Android TV, IPTV para Funai Android TV, IPTV para Sanyo Android TV, IPTV para JVC Android TV, IPTV para Akai Android TV, IPTV para Daewoo Android TV, IPTV para Goldstar Android TV, IPTV para Hitachi Android TV, IPTV para Mitsubishi Android TV, IPTV para NEC Android TV, IPTV para Pioneer Android TV, IPTV para Sansui Android TV, IPTV para Seiki Android TV, IPTV para Vizio Android TV, IPTV para Insignia Android TV, IPTV para Element Android TV, IPTV para Sceptre Android TV, IPTV para Onn Android TV" />
