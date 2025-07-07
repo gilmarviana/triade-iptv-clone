@@ -59,7 +59,6 @@ module.exports = {
                 quote_style: 1, // Single quotes
                 preserve_annotations: false, // Don't preserve annotations
                 preamble: null, // No preamble
-                quote_style: 1, // Single quotes
                 wrap_iife: true, // Wrap IIFE
                 wrap_func_args: true, // Wrap function arguments
                 ecma: 2020, // ECMAScript version
@@ -134,6 +133,20 @@ module.exports = {
               name: 'components',
               priority: 5,
               reuseExistingChunk: true
+            },
+            // Separar APIs e serviços
+            services: {
+              test: /[\\/]src[\\/]services[\\/]/,
+              name: 'services',
+              priority: 5,
+              reuseExistingChunk: true
+            },
+            // Separar configurações
+            config: {
+              test: /[\\/]src[\\/]config[\\/]/,
+              name: 'config',
+              priority: 5,
+              reuseExistingChunk: true
             }
           }
         };
@@ -142,6 +155,10 @@ module.exports = {
         webpackConfig.optimization.runtimeChunk = 'single';
         webpackConfig.optimization.moduleIds = 'deterministic';
         webpackConfig.optimization.chunkIds = 'deterministic';
+        
+        // Habilitar tree-shaking mais agressivo
+        webpackConfig.optimization.usedExports = true;
+        webpackConfig.optimization.sideEffects = true;
 
         // Desabilitar source maps em produção
         webpackConfig.devtool = false;
@@ -181,14 +198,14 @@ module.exports = {
     ],
     plugins: [
       // Remover PropTypes em produção
-      env === 'production' && [
+      process.env.NODE_ENV === 'production' && [
         'transform-react-remove-prop-types',
         {
           removeImport: true
         }
       ],
       // Otimizações adicionais
-      env === 'production' && [
+      process.env.NODE_ENV === 'production' && [
         '@babel/plugin-transform-runtime',
         {
           corejs: 3,
@@ -196,7 +213,9 @@ module.exports = {
           regenerator: true,
           useESModules: true
         }
-      ]
+      ],
+      // Plugin para remover código morto
+      process.env.NODE_ENV === 'production' && 'babel-plugin-transform-remove-console'
     ].filter(Boolean)
   }
 }; 

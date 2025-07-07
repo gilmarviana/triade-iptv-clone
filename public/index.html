@@ -6,6 +6,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffb300" />
     
+    <!-- CSS Crítico Inline para evitar render blocking -->
+    <style>
+      /* CSS crítico para renderização inicial */
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: #f7f7fa;
+        color: #181c2f;
+      }
+      
+      /* Loading spinner crítico */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #d68910;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+      
+      /* Layout crítico */
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Header crítico */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 3vw;
+        background: #101223;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      }
+      
+      .header__logo-img {
+        height: 50px;
+        width: auto;
+        max-width: 200px;
+        object-fit: contain;
+      }
+      
+      /* Hero crítico */
+      .hero {
+        background: linear-gradient(120deg, #181c2f 60%, #ffb300 100%);
+        color: #fff;
+        padding: 5rem 2rem 4rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 350px;
+        box-shadow: 0 4px 24px #181c2f22;
+      }
+      
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 900;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+        text-shadow: 1px 2px 12px #00000055;
+      }
+      
+      .hero p {
+        font-size: 1.25rem;
+        margin-bottom: 2.2rem;
+        font-weight: 500;
+        text-shadow: 0 1px 8px #00000033;
+      }
+      
+      .hero__btn {
+        background: linear-gradient(90deg, #ffb300 60%, #ff9800 100%);
+        color: #181c2f;
+        padding: 1rem 2.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 1.25rem;
+        box-shadow: 0 2px 12px #ffb30033;
+        transition: background 0.2s, color 0.2s;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+      }
+      
+      /* Responsividade crítica */
+      @media (max-width: 700px) {
+        .hero {
+          padding: 2.5rem 1rem 2rem 1rem;
+          min-height: 220px;
+        }
+        .hero h1 {
+          font-size: 1.5rem;
+        }
+        .hero__btn {
+          font-size: 1rem;
+          padding: 0.7rem 1.2rem;
+        }
+        .header {
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem;
+        }
+      }
+    </style>
+    
     <!-- Preload recursos críticos -->
     <link rel="preload" href="%PUBLIC_URL%/logo-iptv.png" as="image" type="image/png">
     <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style">
@@ -245,6 +363,10 @@
   <body>
     <noscript>Você precisa habilitar o JavaScript para rodar este app.</noscript>
     <div id="root"></div>
+    
+    <!-- CSS não-crítico carregado de forma não-bloqueante -->
+    <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css"></noscript>
     
     <!-- Google Analytics e Tag Manager - Carregamento otimizado -->
     <script>
