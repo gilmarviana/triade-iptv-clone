@@ -23,7 +23,7 @@ const MovieCarousel = () => {
   
   // Estados para categorias e filtros
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('main-all');
   const [searchQuery, setSearchQuery] = useState('');
   const [contentType, setContentType] = useState('all'); // 'all', 'movies', 'tv'
   const [sortBy, setSortBy] = useState('popularity'); // 'popularity', 'rating', 'date'
@@ -44,72 +44,31 @@ const MovieCarousel = () => {
   const fetchCategories = async () => {
     try {
       const genres = await fetchGenres();
-      
-      // Categorias principais organizadas
+      // Categorias principais organizadas com id único
       const mainCategories = [
-        { id: 'all', name: '🎬 Todos os Títulos', type: 'all', priority: 1 },
-        { id: 'popular', name: '🔥 Mais Populares', type: 'all', priority: 2 },
-        { id: 'now_playing', name: '🎭 Em Cartaz', type: 'movies', priority: 3 },
-        { id: 'upcoming', name: '📅 Próximos Lançamentos', type: 'movies', priority: 4 }
+        { id: 'main-all', name: '🎬 Todos os Títulos', type: 'main', priority: 1 },
+        { id: 'main-popular', name: '🔥 Mais Populares', type: 'main', priority: 2 },
+        { id: 'main-now_playing', name: '🎭 Em Cartaz', type: 'main', priority: 3 },
+        { id: 'main-upcoming', name: '📅 Próximos Lançamentos', type: 'main', priority: 4 }
       ];
-      
-      // Gêneros de filmes organizados
-      const movieGenres = [
-        { id: '28', name: '💥 Ação', type: 'movies', priority: 5 },
-        { id: '12', name: '🌍 Aventura', type: 'movies', priority: 6 },
-        { id: '16', name: '🎨 Animação', type: 'movies', priority: 7 },
-        { id: '35', name: '😂 Comédia', type: 'movies', priority: 8 },
-        { id: '80', name: '🔪 Crime', type: 'movies', priority: 9 },
-        { id: '99', name: '📺 Documentário', type: 'movies', priority: 10 },
-        { id: '18', name: '🎭 Drama', type: 'movies', priority: 11 },
-        { id: '10751', name: '👨‍👩‍👧‍👦 Família', type: 'movies', priority: 12 },
-        { id: '14', name: '🧙‍♂️ Fantasia', type: 'movies', priority: 13 },
-        { id: '36', name: '📚 História', type: 'movies', priority: 14 },
-        { id: '27', name: '👻 Terror', type: 'movies', priority: 15 },
-        { id: '10402', name: '🎵 Musical', type: 'movies', priority: 16 },
-        { id: '9648', name: '🔍 Mistério', type: 'movies', priority: 17 },
-        { id: '10749', name: '💕 Romance', type: 'movies', priority: 18 },
-        { id: '878', name: '🚀 Ficção Científica', type: 'movies', priority: 19 },
-        { id: '53', name: '🎬 Suspense', type: 'movies', priority: 20 },
-        { id: '10752', name: '⚔️ Guerra', type: 'movies', priority: 21 },
-        { id: '37', name: '🤠 Western', type: 'movies', priority: 22 }
-      ];
-      
-      // Gêneros de séries organizados
-      const tvGenres = [
-        { id: '10759', name: '💥 Ação & Aventura', type: 'tv', priority: 23 },
-        { id: '16', name: '🎨 Animação', type: 'tv', priority: 24 },
-        { id: '35', name: '😂 Comédia', type: 'tv', priority: 25 },
-        { id: '80', name: '🔪 Crime', type: 'tv', priority: 26 },
-        { id: '99', name: '📺 Documentário', type: 'tv', priority: 27 },
-        { id: '18', name: '🎭 Drama', type: 'tv', priority: 28 },
-        { id: '10751', name: '👨‍👩‍👧‍👦 Família', type: 'tv', priority: 29 },
-        { id: '10762', name: '👶 Infantil', type: 'tv', priority: 30 },
-        { id: '9648', name: '🔍 Mistério', type: 'tv', priority: 31 },
-        { id: '10763', name: '📰 Notícias', type: 'tv', priority: 32 },
-        { id: '10764', name: '🎭 Reality', type: 'tv', priority: 33 },
-        { id: '10765', name: '🚀 Sci-Fi & Fantasia', type: 'tv', priority: 34 },
-        { id: '10766', name: '💕 Soap', type: 'tv', priority: 35 },
-        { id: '10767', name: '🗣️ Talk', type: 'tv', priority: 36 },
-        { id: '10768', name: '⚔️ Guerra & Política', type: 'tv', priority: 37 }
-      ];
-      
+      // Gêneros de filmes e séries com id único
+      const movieGenres = genres.movies.map(genre => ({ ...genre, id: `movie-${genre.id}`, type: 'movie' }));
+      const tvGenres = genres.tv.map(genre => ({ ...genre, id: `tv-${genre.id}`, type: 'tv' }));
       // Combinar todas as categorias e ordenar por prioridade
       const allCategories = [
         ...mainCategories,
         ...movieGenres,
         ...tvGenres
       ].sort((a, b) => a.priority - b.priority);
-      
       setCategories(allCategories);
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
       // Fallback com categorias básicas
       const fallbackCategories = [
-        { id: 'all', name: '🎬 Todos os Títulos', type: 'all' },
-        { id: 'popular', name: '🔥 Mais Populares', type: 'all' },
-        { id: 'now_playing', name: '🎭 Em Cartaz', type: 'movies' },
-        { id: 'upcoming', name: '📅 Próximos Lançamentos', type: 'movies' }
+        { id: 'main-all', name: '🎬 Todos os Títulos', type: 'main' },
+        { id: 'main-popular', name: '🔥 Mais Populares', type: 'main' },
+        { id: 'main-now_playing', name: '🎭 Em Cartaz', type: 'main' },
+        { id: 'main-upcoming', name: '📅 Próximos Lançamentos', type: 'main' }
       ];
       setCategories(fallbackCategories);
     }
@@ -120,7 +79,7 @@ const MovieCarousel = () => {
     try {
       let results = [];
 
-      if (selectedCategory === 'all') {
+      if (selectedCategory === 'main-all') {
         if (contentType === 'all') {
           const [movies, tvShows] = await Promise.all([
             fetchPopularMovies(),
@@ -137,10 +96,10 @@ const MovieCarousel = () => {
           const tvShows = await fetchPopularTVShows();
           results = tvShows.map(t => ({ ...formatMovieData(t), _type: 'tv' }));
         }
-      } else if (selectedCategory === 'now_playing') {
+      } else if (selectedCategory === 'main-now_playing') {
         const movies = await fetchNowPlaying();
         results = movies.map(m => ({ ...formatMovieData(m), _type: 'movie' }));
-      } else if (selectedCategory === 'popular') {
+      } else if (selectedCategory === 'main-popular') {
         if (contentType === 'all') {
           const [movies, tvShows] = await Promise.all([
             fetchPopularMovies(),
@@ -157,13 +116,15 @@ const MovieCarousel = () => {
           const tvShows = await fetchPopularTVShows();
           results = tvShows.map(t => ({ ...formatMovieData(t), _type: 'tv' }));
         }
-      } else if (selectedCategory === 'upcoming') {
+      } else if (selectedCategory === 'main-upcoming') {
         const movies = await fetchUpcomingMovies();
         results = movies.map(m => ({ ...formatMovieData(m), _type: 'movie' }));
-      } else {
-        // Busca por gênero específico
-        const genreResults = await fetchMoviesByGenre(selectedCategory);
+      } else if (selectedCategory.startsWith('movie-')) {
+        const genreResults = await fetchMoviesByGenre(selectedCategory.split('-')[1]);
         results = genreResults.map(m => ({ ...formatMovieData(m), _type: 'movie' }));
+      } else if (selectedCategory.startsWith('tv-')) {
+        const genreResults = await fetchMoviesByGenre(selectedCategory.split('-')[1]);
+        results = genreResults.map(m => ({ ...formatMovieData(m), _type: 'tv' }));
       }
 
       // Aplicar ordenação
@@ -221,7 +182,7 @@ const MovieCarousel = () => {
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
-    setSearchQuery(''); // Limpa a busca ao trocar categoria
+    setSearchQuery('');
   };
 
   const handleSearchSubmit = (e) => {
@@ -376,7 +337,7 @@ const MovieCarousel = () => {
             <div className="categories-scroll">
               {categories.map((category) => (
                 <button
-                  key={category.type + '-' + category.id}
+                  key={category.id}
                   className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
                   onClick={() => handleCategoryChange(category.id)}
                 >

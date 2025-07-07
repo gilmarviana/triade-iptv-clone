@@ -33,7 +33,7 @@ const OptimizedImage = ({
 
   // Função para gerar srcset responsivo
   const getSrcSet = (originalSrc) => {
-    if (!originalSrc || originalSrc.startsWith('data:') || originalSrc.startsWith('https://via.placeholder.com')) {
+    if (!originalSrc || originalSrc.startsWith('data:') || originalSrc.startsWith('/images/placeholder-poster.png')) {
       return null;
     }
     if (originalSrc.startsWith('/')) {
@@ -46,7 +46,13 @@ const OptimizedImage = ({
         const path = match[2];
         return `https://image.tmdb.org/t/p/w300${path} 300w, https://image.tmdb.org/t/p/w500${path} 500w, https://image.tmdb.org/t/p/w780${path} 780w`;
       }
-      return originalSrc;
+      // Se não bater, tenta pegar só o path
+      const pathMatch = originalSrc.match(/\/t\/p\/(.+)/);
+      if (pathMatch) {
+        const path = pathMatch[1].replace(/^w\d+/, '');
+        return `https://image.tmdb.org/t/p/w300/${path} 300w, https://image.tmdb.org/t/p/w500/${path} 500w, https://image.tmdb.org/t/p/w780/${path} 780w`;
+      }
+      return null;
     }
     return null;
   };
