@@ -51,6 +51,47 @@ const JogosDoDia = () => {
   // Lista de campeonatos para filtro (sem 'hoje' e 'ao-vivo')
   const ligasParaFiltro = principaisLigas.filter(liga => liga.id !== 'hoje' && liga.id !== 'ao-vivo');
 
+  const fetchJogos = useCallback(async () => {
+    if (!selectedLeague) return;
+    
+    setLoading(true);
+    try {
+      let jogosData = [];
+      
+      if (selectedRound === 'proximos') {
+        // Buscar próximos jogos da liga (status FS)
+        jogosData = await fetchProximosJogosLiga(selectedLeague);
+      } else if (selectedRound === 'data') {
+        // Buscar jogos por data específica
+        jogosData = await fetchJogosDoDia(roundDate);
+      } else if (selectedRound === 'rodada' && selectedRodada) {
+        // Buscar jogos por rodada específica
+        jogosData = await fetchJogosPorRodada(selectedLeague, selectedRodada);
+      } else {
+        // Buscar todos os jogos da liga
+        jogosData = await fetchJogosPorLiga(selectedLeague);
+      }
+      setAutoRefresh(false);
+      
+      // Ordenar por data decrescente (mais recentes primeiro)
+      const jogosOrdenados = jogosData.sort((a, b) => new Date(b.data) - new Date(a.data));
+      
+      setJogos(jogosOrdenados);
+      setCurrentPage(1);
+    } catch (error) {
+      console.error('Erro ao buscar jogos:', error);
+      setJogos([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedLeague, selectedRound, roundDate, selectedRodada]);
+
+  // Versão otimizada com debounce para evitar chamadas excessivas
+  const debouncedFetchJogos = useCallback(
+    debounce(fetchJogos, 300),
+    [fetchJogos]
+  );
+
   useEffect(() => {
     debouncedFetchJogos();
     setCurrentPage(1); // Reset para primeira página quando mudar filtros
@@ -156,47 +197,6 @@ const JogosDoDia = () => {
       setLoadingRodadas(false);
     }
   };
-
-  const fetchJogos = useCallback(async () => {
-    if (!selectedLeague) return;
-    
-    setLoading(true);
-    try {
-      let jogosData = [];
-      
-      if (selectedRound === 'proximos') {
-        // Buscar próximos jogos da liga (status FS)
-        jogosData = await fetchProximosJogosLiga(selectedLeague);
-      } else if (selectedRound === 'data') {
-        // Buscar jogos por data específica
-        jogosData = await fetchJogosDoDia(roundDate);
-      } else if (selectedRound === 'rodada' && selectedRodada) {
-        // Buscar jogos por rodada específica
-        jogosData = await fetchJogosPorRodada(selectedLeague, selectedRodada);
-      } else {
-        // Buscar todos os jogos da liga
-        jogosData = await fetchJogosPorLiga(selectedLeague);
-      }
-      setAutoRefresh(false);
-      
-      // Ordenar por data decrescente (mais recentes primeiro)
-      const jogosOrdenados = jogosData.sort((a, b) => new Date(b.data) - new Date(a.data));
-      
-      setJogos(jogosOrdenados);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error('Erro ao buscar jogos:', error);
-      setJogos([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedLeague, selectedRound, roundDate, selectedRodada]);
-
-  // Versão otimizada com debounce para evitar chamadas excessivas
-  const debouncedFetchJogos = useCallback(
-    debounce(fetchJogos, 300),
-    [fetchJogos]
-  );
 
   const sortJogos = (jogos, sortType) => {
     switch (sortType) {
