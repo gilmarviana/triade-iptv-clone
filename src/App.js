@@ -3,8 +3,8 @@ import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Listas from './components/Listas';
-import JogosDoDia from './components/JogosDoDia';
-import MovieCarousel from './components/MovieCarousel';
+
+
 import Planos from './components/Planos';
 import FAQ from './components/FAQ';
 import Contato from './components/Contato';
@@ -69,8 +69,6 @@ function App() {
       <main>
         <Hero />
         <Listas />
-        <JogosDoDia />
-        <MovieCarousel />
         <Planos />
         <FAQ />
         <Contato />

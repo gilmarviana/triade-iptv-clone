@@ -44,17 +44,74 @@ const MovieCarousel = () => {
   const fetchCategories = async () => {
     try {
       const genres = await fetchGenres();
-      const allCategories = [
-        { id: 'all', name: 'Todos', type: 'all' },
-        { id: 'now_playing', name: 'Em Cartaz', type: 'movies' },
-        { id: 'popular', name: 'Populares', type: 'all' },
-        { id: 'upcoming', name: 'Próximos Lançamentos', type: 'movies' },
-        ...genres.movies.map(genre => ({ ...genre, type: 'movies' })),
-        ...genres.tv.map(genre => ({ ...genre, type: 'tv' }))
+      
+      // Categorias principais organizadas
+      const mainCategories = [
+        { id: 'all', name: '🎬 Todos os Títulos', type: 'all', priority: 1 },
+        { id: 'popular', name: '🔥 Mais Populares', type: 'all', priority: 2 },
+        { id: 'now_playing', name: '🎭 Em Cartaz', type: 'movies', priority: 3 },
+        { id: 'upcoming', name: '📅 Próximos Lançamentos', type: 'movies', priority: 4 }
       ];
+      
+      // Gêneros de filmes organizados
+      const movieGenres = [
+        { id: '28', name: '💥 Ação', type: 'movies', priority: 5 },
+        { id: '12', name: '🌍 Aventura', type: 'movies', priority: 6 },
+        { id: '16', name: '🎨 Animação', type: 'movies', priority: 7 },
+        { id: '35', name: '😂 Comédia', type: 'movies', priority: 8 },
+        { id: '80', name: '🔪 Crime', type: 'movies', priority: 9 },
+        { id: '99', name: '📺 Documentário', type: 'movies', priority: 10 },
+        { id: '18', name: '🎭 Drama', type: 'movies', priority: 11 },
+        { id: '10751', name: '👨‍👩‍👧‍👦 Família', type: 'movies', priority: 12 },
+        { id: '14', name: '🧙‍♂️ Fantasia', type: 'movies', priority: 13 },
+        { id: '36', name: '📚 História', type: 'movies', priority: 14 },
+        { id: '27', name: '👻 Terror', type: 'movies', priority: 15 },
+        { id: '10402', name: '🎵 Musical', type: 'movies', priority: 16 },
+        { id: '9648', name: '🔍 Mistério', type: 'movies', priority: 17 },
+        { id: '10749', name: '💕 Romance', type: 'movies', priority: 18 },
+        { id: '878', name: '🚀 Ficção Científica', type: 'movies', priority: 19 },
+        { id: '53', name: '🎬 Suspense', type: 'movies', priority: 20 },
+        { id: '10752', name: '⚔️ Guerra', type: 'movies', priority: 21 },
+        { id: '37', name: '🤠 Western', type: 'movies', priority: 22 }
+      ];
+      
+      // Gêneros de séries organizados
+      const tvGenres = [
+        { id: '10759', name: '💥 Ação & Aventura', type: 'tv', priority: 23 },
+        { id: '16', name: '🎨 Animação', type: 'tv', priority: 24 },
+        { id: '35', name: '😂 Comédia', type: 'tv', priority: 25 },
+        { id: '80', name: '🔪 Crime', type: 'tv', priority: 26 },
+        { id: '99', name: '📺 Documentário', type: 'tv', priority: 27 },
+        { id: '18', name: '🎭 Drama', type: 'tv', priority: 28 },
+        { id: '10751', name: '👨‍👩‍👧‍👦 Família', type: 'tv', priority: 29 },
+        { id: '10762', name: '👶 Infantil', type: 'tv', priority: 30 },
+        { id: '9648', name: '🔍 Mistério', type: 'tv', priority: 31 },
+        { id: '10763', name: '📰 Notícias', type: 'tv', priority: 32 },
+        { id: '10764', name: '🎭 Reality', type: 'tv', priority: 33 },
+        { id: '10765', name: '🚀 Sci-Fi & Fantasia', type: 'tv', priority: 34 },
+        { id: '10766', name: '💕 Soap', type: 'tv', priority: 35 },
+        { id: '10767', name: '🗣️ Talk', type: 'tv', priority: 36 },
+        { id: '10768', name: '⚔️ Guerra & Política', type: 'tv', priority: 37 }
+      ];
+      
+      // Combinar todas as categorias e ordenar por prioridade
+      const allCategories = [
+        ...mainCategories,
+        ...movieGenres,
+        ...tvGenres
+      ].sort((a, b) => a.priority - b.priority);
+      
       setCategories(allCategories);
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
+      // Fallback com categorias básicas
+      const fallbackCategories = [
+        { id: 'all', name: '🎬 Todos os Títulos', type: 'all' },
+        { id: 'popular', name: '🔥 Mais Populares', type: 'all' },
+        { id: 'now_playing', name: '🎭 Em Cartaz', type: 'movies' },
+        { id: 'upcoming', name: '📅 Próximos Lançamentos', type: 'movies' }
+      ];
+      setCategories(fallbackCategories);
     }
   };
 
@@ -229,6 +286,18 @@ const MovieCarousel = () => {
     return type === 'movie' ? '🎬 Filme' : '📺 Série';
   };
 
+  const getPosterSrc = (item) => {
+    const tmdbBase = 'https://image.tmdb.org/t/p/w500';
+    if (!item?.poster_path || typeof item.poster_path !== 'string' || item.poster_path.trim() === '' || item.poster_path.includes('null')) {
+      return '/images/placeholder-poster.png';
+    }
+    // Se vier só o caminho, monta a URL completa
+    if (item.poster_path.startsWith('/')) {
+      return `${tmdbBase}${item.poster_path}`;
+    }
+    return item.poster_path;
+  };
+
   if (loading) {
     return (
       <div className="movie-carousel-loading">
@@ -239,16 +308,17 @@ const MovieCarousel = () => {
   }
 
   const current = items[currentIndex];
+  console.log('DEBUG poster_path:', current?.title, current?.poster_path);
 
   return (
     <>
       <div className="movie-carousel-container" id="filmes-em-cartaz">
         {/* Filtros e Busca */}
         <div className="movie-filters">
-          <div className="filters-header">
-            <h2>🎬 Catálogo de Filmes e Séries</h2>
-            <p>Explore milhares de títulos disponíveis no nosso IPTV, Sujeito a consulta de qual servidor*</p>
-          </div>
+                  <div className="filters-header">
+          <h2>🎬 Catálogo Completo de Filmes e Séries</h2>
+          <p>Explore milhares de títulos em alta qualidade. Encontre seus filmes e séries favoritos no nosso IPTV premium!</p>
+        </div>
           
           {/* Barra de Busca */}
           <form onSubmit={handleSearchSubmit} className="search-form">
@@ -306,7 +376,7 @@ const MovieCarousel = () => {
             <div className="categories-scroll">
               {categories.map((category) => (
                 <button
-                  key={category.id}
+                  key={category.type + '-' + category.id}
                   className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
                   onClick={() => handleCategoryChange(category.id)}
                 >
@@ -335,7 +405,7 @@ const MovieCarousel = () => {
               <div className="movie-card">
                 <div className="movie-poster">
                   <OptimizedImage
-                    src={current?.poster_path || 'https://via.placeholder.com/300x450/666/fff?text=Imagem'}
+                    src={getPosterSrc(current)}
                     alt={`Poster do ${current?._type === 'movie' ? 'filme' : 'seriado'} ${current?.title || 'Título'} - Avaliação ${current?.vote_average?.toFixed(1) || 'N/A'}`}
                     className="movie-poster-img"
                     width={300}
