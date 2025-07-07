@@ -67,6 +67,46 @@
         background: #ff9800;
         color: #fff;
       }
+      .hero {
+        background: linear-gradient(120deg, #181c2f 60%, #ffb300 100%);
+        color: #fff;
+        padding: 5rem 2rem 4rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 350px;
+        box-shadow: 0 4px 24px #181c2f22;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 900;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+        text-shadow: 1px 2px 12px #00000055;
+      }
+      .hero p {
+        font-size: 1.25rem;
+        margin-bottom: 2.2rem;
+        font-weight: 500;
+        text-shadow: 0 1px 8px #00000033;
+      }
+      .hero__btn {
+        background: linear-gradient(90deg, #ffb300 60%, #ff9800 100%);
+        color: #181c2f;
+        padding: 1rem 2.5rem;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 1.25rem;
+        box-shadow: 0 2px 12px #ffb30033;
+        transition: background 0.2s, color 0.2s;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+      }
+      .hero__btn:hover {
+        background: #ff9800;
+        color: #fff;
+      }
       @media (max-width: 700px) {
         .header {
           flex-direction: column;
@@ -84,6 +124,17 @@
           margin-left: 0;
           width: 100%;
           text-align: center;
+        }
+        .hero {
+          padding: 2.5rem 1rem 2rem 1rem;
+          min-height: 220px;
+        }
+        .hero h1 {
+          font-size: 1.5rem;
+        }
+        .hero__btn {
+          font-size: 1rem;
+          padding: 0.7rem 1.2rem;
         }
       }
       @media (max-width: 480px) {
@@ -156,27 +207,9 @@
     <link rel="preload" href="%PUBLIC_URL%/images/optimized/logo-iptv-70.webp" as="image" type="image/webp">
     <link rel="preload" href="%PUBLIC_URL%/images/optimized/logo-iptv-70.png" as="image" type="image/png">
     
-    <!-- CSS não-crítico carregado de forma ultra-otimizada -->
-    <script>
-      // Carregar CSS não-crítico de forma não-bloqueante
-      function loadNonCriticalCSS() {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '%PUBLIC_URL%/static/css/main.css';
-        link.media = 'print';
-        link.onload = function() {
-          this.media = 'all';
-        };
-        document.head.appendChild(link);
-      }
-      
-      // Carregar CSS após carregamento da página
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadNonCriticalCSS);
-      } else {
-        loadNonCriticalCSS();
-      }
-    </script>
+    <!-- CSS principal não-bloqueante -->
+    <link rel="preload" href="%PUBLIC_URL%/static/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="%PUBLIC_URL%/static/css/main.css"></noscript>
     
     <!-- Preload de recursos críticos -->
     <link rel="preload" href="%PUBLIC_URL%/static/js/main.js" as="script">
