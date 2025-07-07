@@ -68,14 +68,34 @@
 
 # Headers de Cache para Recursos Estáticos
 <IfModule mod_headers.c>
-  # Cache para arquivos estáticos
+  # Cache para arquivos estáticos com hash (imutáveis)
   <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Expires "Thu, 31 Dec 2024 23:59:59 GMT"
+  </FilesMatch>
+  
+  # Cache específico para arquivos JS/CSS com hash
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Expires "Thu, 31 Dec 2024 23:59:59 GMT"
+    Header set Vary "Accept-Encoding"
   </FilesMatch>
   
   # Cache para HTML
   <FilesMatch "\.(html|htm)$">
     Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+  
+  # Cache para imagens
+  <FilesMatch "\.(png|jpg|jpeg|gif|ico|svg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Expires "Thu, 31 Dec 2024 23:59:59 GMT"
+  </FilesMatch>
+  
+  # Cache para fontes
+  <FilesMatch "\.(woff|woff2|ttf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Expires "Thu, 31 Dec 2024 23:59:59 GMT"
   </FilesMatch>
   
   # Headers de segurança
@@ -86,6 +106,9 @@
   
   # Headers de performance
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  
+  # Remover ETags para melhor cache
+  Header unset ETag
 </IfModule>
 
 # Configurações de Segurança
