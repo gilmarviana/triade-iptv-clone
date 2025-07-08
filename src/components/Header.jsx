@@ -8,8 +8,8 @@ const Header = () => (
       <OptimizedLogo 
         className="header__logo-img" 
         alt="Logo Barato IPTV"
-        width={70}
-        height={78}
+        width={40}
+        height={45}
         priority={true}
       />
       <span className="header__logo-text">Logo Barato IPTV</span>

@@ -4,21 +4,19 @@
   "description": "Planos a partir de R$10,00/mês. +30.000 canais, filmes, séries e futebol ao vivo. Teste grátis 4h.",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo-iptv.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
+      "src": "images/optimized/logo-iptv-70.png",
+      "sizes": "70x78",
+      "type": "image/png"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "src": "images/optimized/logo-iptv-70.webp",
+      "sizes": "70x78",
+      "type": "image/webp"
     }
   ],
   "start_url": "/",
