@@ -582,15 +582,17 @@
                     }
                 });
                 
+                // Filtro de categoria - aplica imediatamente se já pesquisou
                 categoryFilter.addEventListener('change', () => {
                     if (this.hasSearched) {
-                        this.filterContent();
+                        this.applyFilters();
                     }
                 });
                 
+                // Filtro de qualidade - aplica imediatamente se já pesquisou
                 qualityFilter.addEventListener('change', () => {
                     if (this.hasSearched) {
-                        this.filterContent();
+                        this.applyFilters();
                     }
                 });
             }
@@ -791,6 +793,37 @@
                 });
                 
                 this.currentPage = 1;
+            }
+            
+            applyFilters() {
+                // Aplicar filtros nos resultados já encontrados
+                const selectedCategory = document.getElementById('categoryFilter').value;
+                const selectedQuality = document.getElementById('qualityFilter').value;
+                
+                const channels = this.channels[this.currentList] || [];
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                
+                // Primeiro filtrar por busca (mantém os resultados da busca original)
+                let filteredBySearch = channels.filter(channel => {
+                    return !searchTerm || 
+                        channel.name.toLowerCase().includes(searchTerm) ||
+                        channel.groupTitle.toLowerCase().includes(searchTerm);
+                });
+                
+                // Depois aplicar filtros de categoria e qualidade
+                this.filteredChannels = filteredBySearch.filter(channel => {
+                    const matchesCategory = !selectedCategory || 
+                        channel.groupTitle === selectedCategory;
+                    
+                    const matchesQuality = !selectedQuality || 
+                        channel.quality === selectedQuality;
+                    
+                    return matchesCategory && matchesQuality;
+                });
+                
+                this.currentPage = 1;
+                this.updateStats();
+                this.displayContent();
             }
             
             updateCategoryFilter(channels) {
