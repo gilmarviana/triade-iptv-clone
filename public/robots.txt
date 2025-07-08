@@ -37,6 +37,12 @@ Disallow: /test/
 Disallow: /dev/
 Disallow: /staging/
 
+# Bloquear páginas duplicadas que causam problemas de SEO
+Disallow: /iptvbarato.html
+Disallow: /iptvbarato
+Disallow: /baratoiptv.html
+Disallow: /seo-iptv-barato.html
+
 # Bloquear extensões de arquivo desnecessárias
 Disallow: /*.json$
 Disallow: /*.xml$

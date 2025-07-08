@@ -111,13 +111,19 @@
   Header unset ETag
 </IfModule>
 
-# Configurações de Segurança
+# Configurações de Segurança e SEO
 <IfModule mod_rewrite.c>
   RewriteEngine On
   
   # Forçar HTTPS (descomente se tiver SSL)
   # RewriteCond %{HTTPS} off
   # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # Redirecionar páginas duplicadas para a página principal
+  RewriteRule ^iptvbarato\.html$ / [R=301,L]
+  RewriteRule ^iptvbarato$ / [R=301,L]
+  RewriteRule ^baratoiptv\.html$ / [R=301,L]
+  RewriteRule ^seo-iptv-barato\.html$ / [R=301,L]
   
   # Remover extensões de arquivo
   RewriteCond %{REQUEST_FILENAME} !-d
