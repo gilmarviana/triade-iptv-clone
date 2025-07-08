@@ -769,46 +769,62 @@
                 
                 const channels = this.channels[this.currentList] || [];
                 
-                this.filteredChannels = channels.filter(channel => {
-                    const matchesSearch = !searchTerm || 
+                // Primeiro filtro: apenas por termo de busca
+                let filteredBySearch = channels.filter(channel => {
+                    return !searchTerm || 
                         channel.name.toLowerCase().includes(searchTerm) ||
                         channel.groupTitle.toLowerCase().includes(searchTerm);
-                    
+                });
+                
+                // Atualizar categorias baseadas nos resultados da busca
+                this.updateCategoryFilter(filteredBySearch);
+                
+                // Segundo filtro: aplicar filtros de categoria e qualidade
+                this.filteredChannels = filteredBySearch.filter(channel => {
                     const matchesCategory = !selectedCategory || 
                         channel.groupTitle === selectedCategory;
                     
                     const matchesQuality = !selectedQuality || 
                         channel.quality === selectedQuality;
                     
-                    return matchesSearch && matchesCategory && matchesQuality;
+                    return matchesCategory && matchesQuality;
                 });
                 
                 this.currentPage = 1;
-                this.populateCategoryFilter();
             }
             
-            populateCategoryFilter() {
+            updateCategoryFilter(channels) {
                 const categoryFilter = document.getElementById('categoryFilter');
-                const channels = this.channels[this.currentList] || [];
                 const categories = new Set();
                 
+                // Coletar categorias dos canais filtrados
                 channels.forEach(channel => {
                     if (channel.groupTitle) {
                         categories.add(channel.groupTitle);
                     }
                 });
                 
-                // Limpar opções existentes (exceto a primeira)
+                // Salvar categoria selecionada atual
+                const currentSelection = categoryFilter.value;
+                
+                // Limpar e recriar opções
                 categoryFilter.innerHTML = '<option value="">Todas as Categorias</option>';
                 
-                // Adicionar novas categorias
+                // Adicionar categorias baseadas nos resultados
                 Array.from(categories).sort().forEach(category => {
                     const option = document.createElement('option');
                     option.value = category;
                     option.textContent = category;
                     categoryFilter.appendChild(option);
                 });
+                
+                // Restaurar seleção se ainda existir
+                if (currentSelection && categories.has(currentSelection)) {
+                    categoryFilter.value = currentSelection;
+                }
             }
+            
+
             
             displayContent() {
                 const contentDiv = document.getElementById('content');
