@@ -60,6 +60,9 @@ Disallow: /*/feed/rss2/
 # Permitir página 404 personalizada
 Allow: /404.html
 
+# Permitir página de conteúdo
+Allow: /conteudo.html
+
 # Bloquear extensões de arquivo desnecessárias
 Disallow: /*.json$
 Disallow: /*.xml$

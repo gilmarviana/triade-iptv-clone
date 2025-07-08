@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Conteúdo IPTV - Busca e Filtros | IPTV Barato</title>
+    <meta name="description" content="Explore milhares de canais, filmes e séries com nosso sistema de busca avançado. Filtre por categoria, qualidade e muito mais.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://iptvbarato.site/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://iptvbarato.site/conteudo">
+    <meta property="og:title" content="Conteúdo IPTV - Busca e Filtros">
+    <meta property="og:description" content="Explore milhares de canais, filmes e séries com nosso sistema de busca avançado.">
+    <meta property="og:image" content="https://iptvbarato.site/logo-iptv.png">
+    
+    <!-- Fonts -->
+    <link rel="preload" href="/fonts/Montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Montserrat-600.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-400.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-600.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-700.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #181c2f 0%, #2c3e50 100%);
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 10px rgba(255, 179, 0, 0.3));
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffb300;
+            text-shadow: 0 2px 10px rgba(255, 179, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+            margin-bottom: 2rem;
+        }
+        
+        .search-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: inherit;
+        }
+        
+        .search-input::placeholder {
+            color: #bdc3c7;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #ffb300;
+            box-shadow: 0 0 20px rgba(255, 179, 0, 0.3);
+        }
+        
+        .filter-select {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #ffb300;
+        }
+        
+        .filter-select option {
+            background: #2c3e50;
+            color: #fff;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffb300;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .content-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .content-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: #ffb300;
+        }
+        
+        .content-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            object-fit: cover;
+            background: #2c3e50;
+        }
+        
+        .content-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            line-height: 1.4;
+        }
+        
+        .content-category {
+            font-size: 0.9rem;
+            color: #ffb300;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .content-quality {
+            font-size: 0.8rem;
+            color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #bdc3c7;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ffb300;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #bdc3c7;
+        }
+        
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffb300;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 179, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .page-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-btn:hover,
+        .page-btn.active {
+            background: #ffb300;
+            color: #181c2f;
+        }
+        
+        .error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: auto;
+            }
+            
+            .stats {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .search-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="/logo-iptv.png" alt="IPTV Barato" class="logo">
+            <h1 class="title">Conteúdo IPTV</h1>
+            <p class="subtitle">Explore milhares de canais, filmes e séries com nosso sistema de busca avançado</p>
+        </div>
+        
+        <div class="search-section">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Digite o nome do canal, filme ou série..."
+                    autocomplete="off"
+                >
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">Todas as Categorias</option>
+                </select>
+                <select class="filter-select" id="qualityFilter">
+                    <option value="">Todas as Qualidades</option>
+                    <option value="4K">4K</option>
+                    <option value="FHD">FHD</option>
+                    <option value="HD">HD</option>
+                    <option value="SD">SD</option>
+                </select>
+            </div>
+            
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalChannels">0</span>
+                    <span class="stat-label">Total de Canais</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="filteredChannels">0</span>
+                    <span class="stat-label">Resultados</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="categories">0</span>
+                    <span class="stat-label">Categorias</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando conteúdo...</p>
+            </div>
+        </div>
+        
+        <div class="pagination" id="pagination"></div>
+    </div>
+    
+    <script>
+        class M3UContentManager {
+            constructor() {
+                this.m3uUrl = 'http://nplaylunar.shop/get.php?username=98809226&password=12506682&type=m3u_plus&output=mpegts';
+                this.channels = [];
+                this.filteredChannels = [];
+                this.categories = new Set();
+                this.currentPage = 1;
+                this.itemsPerPage = 20;
+                
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    await this.loadM3UContent();
+                    this.setupEventListeners();
+                    this.updateStats();
+                    this.populateCategoryFilter();
+                    this.displayContent();
+                } catch (error) {
+                    this.showError('Erro ao carregar o conteúdo. Tente novamente mais tarde.');
+                    console.error('Erro ao inicializar:', error);
+                }
+            }
+            
+            async loadM3UContent() {
+                const response = await fetch(this.m3uUrl);
+                if (!response.ok) {
+                    throw new Error('Falha ao carregar o conteúdo M3U');
+                }
+                
+                const content = await response.text();
+                this.parseM3UContent(content);
+            }
+            
+            parseM3UContent(content) {
+                const lines = content.split('\n');
+                let currentChannel = null;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    
+                    if (line.startsWith('#EXTINF:')) {
+                        currentChannel = this.parseChannelInfo(line);
+                    } else if (line.startsWith('http') && currentChannel) {
+                        currentChannel.url = line;
+                        this.channels.push(currentChannel);
+                        
+                        // Extrair categoria
+                        if (currentChannel.groupTitle) {
+                            this.categories.add(currentChannel.groupTitle);
+                        }
+                        
+                        currentChannel = null;
+                    }
+                }
+                
+                this.filteredChannels = [...this.channels];
+            }
+            
+            parseChannelInfo(line) {
+                const channel = {};
+                
+                // Extrair tvg-name
+                const tvgNameMatch = line.match(/tvg-name="([^"]*)"/);
+                channel.name = tvgNameMatch ? tvgNameMatch[1] : '';
+                
+                // Extrair tvg-logo
+                const tvgLogoMatch = line.match(/tvg-logo="([^"]*)"/);
+                channel.logo = tvgLogoMatch ? tvgLogoMatch[1] : '';
+                
+                // Extrair group-title
+                const groupTitleMatch = line.match(/group-title="([^"]*)"/);
+                channel.groupTitle = groupTitleMatch ? groupTitleMatch[1] : '';
+                
+                // Extrair qualidade do nome
+                channel.quality = this.extractQuality(channel.name);
+                
+                return channel;
+            }
+            
+            extractQuality(name) {
+                const qualityPatterns = [
+                    { pattern: /4K|UHD/i, quality: '4K' },
+                    { pattern: /FHD|1080p/i, quality: 'FHD' },
+                    { pattern: /HD|720p/i, quality: 'HD' },
+                    { pattern: /SD|480p/i, quality: 'SD' }
+                ];
+                
+                for (const { pattern, quality } of qualityPatterns) {
+                    if (pattern.test(name)) {
+                        return quality;
+                    }
+                }
+                
+                return 'HD'; // Padrão
+            }
+            
+            setupEventListeners() {
+                const searchInput = document.getElementById('searchInput');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const qualityFilter = document.getElementById('qualityFilter');
+                
+                searchInput.addEventListener('input', () => this.filterContent());
+                categoryFilter.addEventListener('change', () => this.filterContent());
+                qualityFilter.addEventListener('change', () => this.filterContent());
+            }
+            
+            filterContent() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const selectedCategory = document.getElementById('categoryFilter').value;
+                const selectedQuality = document.getElementById('qualityFilter').value;
+                
+                this.filteredChannels = this.channels.filter(channel => {
+                    const matchesSearch = !searchTerm || 
+                        channel.name.toLowerCase().includes(searchTerm) ||
+                        channel.groupTitle.toLowerCase().includes(searchTerm);
+                    
+                    const matchesCategory = !selectedCategory || 
+                        channel.groupTitle === selectedCategory;
+                    
+                    const matchesQuality = !selectedQuality || 
+                        channel.quality === selectedQuality;
+                    
+                    return matchesSearch && matchesCategory && matchesQuality;
+                });
+                
+                this.currentPage = 1;
+                this.updateStats();
+                this.displayContent();
+            }
+            
+            populateCategoryFilter() {
+                const categoryFilter = document.getElementById('categoryFilter');
+                const sortedCategories = Array.from(this.categories).sort();
+                
+                sortedCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+            }
+            
+            displayContent() {
+                const contentDiv = document.getElementById('content');
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                const endIndex = startIndex + this.itemsPerPage;
+                const pageChannels = this.filteredChannels.slice(startIndex, endIndex);
+                
+                if (pageChannels.length === 0) {
+                    contentDiv.innerHTML = `
+                        <div class="no-results">
+                            <h3>Nenhum resultado encontrado</h3>
+                            <p>Tente ajustar os filtros ou termos de busca.</p>
+                            <button class="btn" onclick="this.clearFilters()">Limpar Filtros</button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const contentHTML = pageChannels.map(channel => `
+                    <div class="content-item" onclick="this.playChannel('${channel.url}')">
+                        <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
+                             onerror="this.src='/logo-iptv.png'">
+                        <div class="content-title">${channel.name}</div>
+                        <div class="content-category">${channel.groupTitle}</div>
+                        <div class="content-quality">${channel.quality}</div>
+                    </div>
+                `).join('');
+                
+                contentDiv.innerHTML = `
+                    <div class="content-grid">
+                        ${contentHTML}
+                    </div>
+                `;
+                
+                this.updatePagination();
+            }
+            
+            updatePagination() {
+                const totalPages = Math.ceil(this.filteredChannels.length / this.itemsPerPage);
+                const paginationDiv = document.getElementById('pagination');
+                
+                if (totalPages <= 1) {
+                    paginationDiv.innerHTML = '';
+                    return;
+                }
+                
+                let paginationHTML = '';
+                
+                // Botão anterior
+                if (this.currentPage > 1) {
+                    paginationHTML += `<button class="page-btn" onclick="m3uManager.goToPage(${this.currentPage - 1})">Anterior</button>`;
+                }
+                
+                // Páginas
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= this.currentPage - 2 && i <= this.currentPage + 2)) {
+                        paginationHTML += `<button class="page-btn ${i === this.currentPage ? 'active' : ''}" onclick="m3uManager.goToPage(${i})">${i}</button>`;
+                    } else if (i === this.currentPage - 3 || i === this.currentPage + 3) {
+                        paginationHTML += `<span class="page-btn">...</span>`;
+                    }
+                }
+                
+                // Botão próximo
+                if (this.currentPage < totalPages) {
+                    paginationHTML += `<button class="page-btn" onclick="m3uManager.goToPage(${this.currentPage + 1})">Próximo</button>`;
+                }
+                
+                paginationDiv.innerHTML = paginationHTML;
+            }
+            
+            goToPage(page) {
+                this.currentPage = page;
+                this.displayContent();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            updateStats() {
+                document.getElementById('totalChannels').textContent = this.channels.length;
+                document.getElementById('filteredChannels').textContent = this.filteredChannels.length;
+                document.getElementById('categories').textContent = this.categories.size;
+            }
+            
+            showError(message) {
+                const contentDiv = document.getElementById('content');
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <h3>Erro</h3>
+                        <p>${message}</p>
+                        <button class="btn" onclick="location.reload()">Tentar Novamente</button>
+                    </div>
+                `;
+            }
+            
+            clearFilters() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('categoryFilter').value = '';
+                document.getElementById('qualityFilter').value = '';
+                this.filterContent();
+            }
+            
+            playChannel(url) {
+                // Aqui você pode implementar a lógica para reproduzir o canal
+                // Por exemplo, abrir em um player ou copiar a URL
+                alert(`URL do canal: ${url}\n\nPara reproduzir, use um player compatível com M3U.`);
+            }
+        }
+        
+        // Inicializar o gerenciador de conteúdo
+        const m3uManager = new M3UContentManager();
+        
+        // Função global para limpar filtros
+        window.clearFilters = function() {
+            m3uManager.clearFilters();
+        };
+    </script>
+</body>
+</html>
