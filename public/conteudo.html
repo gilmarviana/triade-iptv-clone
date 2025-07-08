@@ -91,6 +91,44 @@
             margin-bottom: 2rem;
         }
         
+        /* Estilos para as Abas */
+        .tabs-section {
+            margin-bottom: 2rem;
+        }
+        
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            border-color: #ffb300;
+            box-shadow: 0 4px 15px rgba(255, 179, 0, 0.3);
+        }
+        
         .search-section {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -105,6 +143,7 @@
             gap: 1rem;
             margin-bottom: 1.5rem;
             flex-wrap: wrap;
+            align-items: center;
         }
         
         .search-input {
@@ -152,6 +191,31 @@
         .filter-select option {
             background: #2c3e50;
             color: #fff;
+        }
+        
+        .search-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            min-width: 120px;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 179, 0, 0.4);
+        }
+        
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
         
         .stats {
@@ -336,6 +400,23 @@
             text-align: center;
         }
         
+        .welcome-message {
+            text-align: center;
+            padding: 3rem;
+            color: #bdc3c7;
+        }
+        
+        .welcome-message h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffb300;
+        }
+        
+        .welcome-message p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -343,6 +424,10 @@
             
             .title {
                 font-size: 2rem;
+            }
+            
+            .tabs-container {
+                flex-direction: column;
             }
             
             .search-container {
@@ -375,6 +460,11 @@
             .search-section {
                 padding: 1.5rem;
             }
+            
+            .tab-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -384,6 +474,24 @@
             <img src="/logo-iptv.png" alt="IPTV Barato" class="logo">
             <h1 class="title">Conteúdo IPTV</h1>
             <p class="subtitle">Explore milhares de canais, filmes e séries com nosso sistema de busca avançado</p>
+        </div>
+        
+        <!-- Abas de Listas -->
+        <div class="tabs-section">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-list="lunar" onclick="m3uManager.switchList('lunar')">
+                    🌙 Lista Padrão Lunar
+                </button>
+                <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
+                    ⭐ Lista Premium
+                </button>
+                <button class="tab-btn" data-list="esportes" onclick="m3uManager.switchList('esportes')">
+                    ⚽ Lista Esportes
+                </button>
+                <button class="tab-btn" data-list="filmes" onclick="m3uManager.switchList('filmes')">
+                    🎬 Lista Filmes
+                </button>
+            </div>
         </div>
         
         <div class="search-section">
@@ -405,9 +513,12 @@
                     <option value="HD">HD</option>
                     <option value="SD">SD</option>
                 </select>
+                <button class="search-btn" id="searchBtn" onclick="m3uManager.search()">
+                    🔍 Pesquisar
+                </button>
             </div>
             
-            <div class="stats" id="stats">
+            <div class="stats" id="stats" style="display: none;">
                 <div class="stat-item">
                     <span class="stat-number" id="totalChannels">0</span>
                     <span class="stat-label">Total de Canais</span>
@@ -424,9 +535,10 @@
         </div>
         
         <div id="content">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Carregando conteúdo...</p>
+            <div class="welcome-message">
+                <h3>Bem-vindo ao Sistema de Busca IPTV</h3>
+                <p>Selecione uma lista acima e use os filtros para encontrar o conteúdo desejado.</p>
+                <p>Clique em "Pesquisar" para exibir os resultados.</p>
             </div>
         </div>
         
@@ -436,31 +548,145 @@
     <script>
         class M3UContentManager {
             constructor() {
-                this.m3uUrl = 'http://nplaylunar.shop/get.php?username=98809226&password=12506682&type=m3u_plus&output=mpegts';
-                this.channels = [];
+                this.currentList = 'lunar';
+                this.m3uUrls = {
+                    lunar: 'http://nplaylunar.shop/get.php?username=98809226&password=12506682&type=m3u_plus&output=mpegts',
+                    premium: '', // Será adicionado quando você enviar o link
+                    esportes: '', // Será adicionado quando você enviar o link
+                    filmes: '' // Será adicionado quando você enviar o link
+                };
+                this.channels = {};
                 this.filteredChannels = [];
                 this.categories = new Set();
                 this.currentPage = 1;
                 this.itemsPerPage = 20;
+                this.hasSearched = false;
                 
                 this.init();
             }
             
-            async init() {
+            init() {
+                this.setupEventListeners();
+                this.updateTabUI();
+            }
+            
+            setupEventListeners() {
+                const searchInput = document.getElementById('searchInput');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const qualityFilter = document.getElementById('qualityFilter');
+                
+                // Permitir busca com Enter
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.search();
+                    }
+                });
+                
+                categoryFilter.addEventListener('change', () => {
+                    if (this.hasSearched) {
+                        this.filterContent();
+                    }
+                });
+                
+                qualityFilter.addEventListener('change', () => {
+                    if (this.hasSearched) {
+                        this.filterContent();
+                    }
+                });
+            }
+            
+            async switchList(listName) {
+                this.currentList = listName;
+                this.hasSearched = false;
+                this.updateTabUI();
+                this.showWelcomeMessage();
+                
+                // Limpar filtros
+                document.getElementById('searchInput').value = '';
+                document.getElementById('categoryFilter').value = '';
+                document.getElementById('qualityFilter').value = '';
+                
+                // Limpar estatísticas
+                document.getElementById('stats').style.display = 'none';
+            }
+            
+            updateTabUI() {
+                // Remover classe active de todas as abas
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Adicionar classe active na aba atual
+                const activeTab = document.querySelector(`[data-list="${this.currentList}"]`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+            }
+            
+            showWelcomeMessage() {
+                const contentDiv = document.getElementById('content');
+                contentDiv.innerHTML = `
+                    <div class="welcome-message">
+                        <h3>Lista ${this.getListDisplayName()}</h3>
+                        <p>Use os filtros acima para buscar conteúdo nesta lista.</p>
+                        <p>Clique em "Pesquisar" para exibir os resultados.</p>
+                    </div>
+                `;
+            }
+            
+            getListDisplayName() {
+                const names = {
+                    lunar: 'Padrão Lunar',
+                    premium: 'Premium',
+                    esportes: 'Esportes',
+                    filmes: 'Filmes'
+                };
+                return names[this.currentList] || this.currentList;
+            }
+            
+            async search() {
+                const searchBtn = document.getElementById('searchBtn');
+                const searchInput = document.getElementById('searchInput');
+                
+                // Verificar se há URL para a lista atual
+                if (!this.m3uUrls[this.currentList]) {
+                    this.showError(`URL da lista ${this.getListDisplayName()} ainda não foi configurada.`);
+                    return;
+                }
+                
+                // Verificar se há termo de busca
+                if (!searchInput.value.trim()) {
+                    this.showError('Digite um termo para pesquisar.');
+                    return;
+                }
+                
+                // Desabilitar botão durante carregamento
+                searchBtn.disabled = true;
+                searchBtn.textContent = '⏳ Carregando...';
+                
                 try {
-                    await this.loadM3UContent();
-                    this.setupEventListeners();
+                    // Carregar conteúdo se ainda não foi carregado
+                    if (!this.channels[this.currentList]) {
+                        await this.loadM3UContent();
+                    }
+                    
+                    this.hasSearched = true;
+                    this.filterContent();
                     this.updateStats();
-                    this.populateCategoryFilter();
                     this.displayContent();
+                    
                 } catch (error) {
-                    this.showError('Erro ao carregar o conteúdo. Tente novamente mais tarde.');
-                    console.error('Erro ao inicializar:', error);
+                    this.showError('Erro ao carregar o conteúdo. Tente novamente.');
+                    console.error('Erro na busca:', error);
+                } finally {
+                    // Reabilitar botão
+                    searchBtn.disabled = false;
+                    searchBtn.textContent = '🔍 Pesquisar';
                 }
             }
             
             async loadM3UContent() {
-                const response = await fetch(this.m3uUrl);
+                const response = await fetch(this.m3uUrls[this.currentList]);
                 if (!response.ok) {
                     throw new Error('Falha ao carregar o conteúdo M3U');
                 }
@@ -472,6 +698,8 @@
             parseM3UContent(content) {
                 const lines = content.split('\n');
                 let currentChannel = null;
+                const channels = [];
+                const categories = new Set();
                 
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i].trim();
@@ -480,18 +708,20 @@
                         currentChannel = this.parseChannelInfo(line);
                     } else if (line.startsWith('http') && currentChannel) {
                         currentChannel.url = line;
-                        this.channels.push(currentChannel);
+                        channels.push(currentChannel);
                         
                         // Extrair categoria
                         if (currentChannel.groupTitle) {
-                            this.categories.add(currentChannel.groupTitle);
+                            categories.add(currentChannel.groupTitle);
                         }
                         
                         currentChannel = null;
                     }
                 }
                 
-                this.filteredChannels = [...this.channels];
+                this.channels[this.currentList] = channels;
+                this.categories = categories;
+                this.filteredChannels = [...channels];
             }
             
             parseChannelInfo(line) {
@@ -532,22 +762,14 @@
                 return 'HD'; // Padrão
             }
             
-            setupEventListeners() {
-                const searchInput = document.getElementById('searchInput');
-                const categoryFilter = document.getElementById('categoryFilter');
-                const qualityFilter = document.getElementById('qualityFilter');
-                
-                searchInput.addEventListener('input', () => this.filterContent());
-                categoryFilter.addEventListener('change', () => this.filterContent());
-                qualityFilter.addEventListener('change', () => this.filterContent());
-            }
-            
             filterContent() {
                 const searchTerm = document.getElementById('searchInput').value.toLowerCase();
                 const selectedCategory = document.getElementById('categoryFilter').value;
                 const selectedQuality = document.getElementById('qualityFilter').value;
                 
-                this.filteredChannels = this.channels.filter(channel => {
+                const channels = this.channels[this.currentList] || [];
+                
+                this.filteredChannels = channels.filter(channel => {
                     const matchesSearch = !searchTerm || 
                         channel.name.toLowerCase().includes(searchTerm) ||
                         channel.groupTitle.toLowerCase().includes(searchTerm);
@@ -562,15 +784,25 @@
                 });
                 
                 this.currentPage = 1;
-                this.updateStats();
-                this.displayContent();
+                this.populateCategoryFilter();
             }
             
             populateCategoryFilter() {
                 const categoryFilter = document.getElementById('categoryFilter');
-                const sortedCategories = Array.from(this.categories).sort();
+                const channels = this.channels[this.currentList] || [];
+                const categories = new Set();
                 
-                sortedCategories.forEach(category => {
+                channels.forEach(channel => {
+                    if (channel.groupTitle) {
+                        categories.add(channel.groupTitle);
+                    }
+                });
+                
+                // Limpar opções existentes (exceto a primeira)
+                categoryFilter.innerHTML = '<option value="">Todas as Categorias</option>';
+                
+                // Adicionar novas categorias
+                Array.from(categories).sort().forEach(category => {
                     const option = document.createElement('option');
                     option.value = category;
                     option.textContent = category;
@@ -589,14 +821,14 @@
                         <div class="no-results">
                             <h3>Nenhum resultado encontrado</h3>
                             <p>Tente ajustar os filtros ou termos de busca.</p>
-                            <button class="btn" onclick="this.clearFilters()">Limpar Filtros</button>
+                            <button class="btn" onclick="m3uManager.clearFilters()">Limpar Filtros</button>
                         </div>
                     `;
                     return;
                 }
                 
                 const contentHTML = pageChannels.map(channel => `
-                    <div class="content-item" onclick="this.playChannel('${channel.url}')">
+                    <div class="content-item" onclick="m3uManager.playChannel('${channel.url}')">
                         <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
                              onerror="this.src='/logo-iptv.png'">
                         <div class="content-title">${channel.name}</div>
@@ -654,9 +886,14 @@
             }
             
             updateStats() {
-                document.getElementById('totalChannels').textContent = this.channels.length;
+                const statsDiv = document.getElementById('stats');
+                const channels = this.channels[this.currentList] || [];
+                
+                document.getElementById('totalChannels').textContent = channels.length;
                 document.getElementById('filteredChannels').textContent = this.filteredChannels.length;
                 document.getElementById('categories').textContent = this.categories.size;
+                
+                statsDiv.style.display = 'flex';
             }
             
             showError(message) {
@@ -674,13 +911,21 @@
                 document.getElementById('searchInput').value = '';
                 document.getElementById('categoryFilter').value = '';
                 document.getElementById('qualityFilter').value = '';
-                this.filterContent();
+                this.hasSearched = false;
+                this.showWelcomeMessage();
+                document.getElementById('stats').style.display = 'none';
             }
             
             playChannel(url) {
                 // Aqui você pode implementar a lógica para reproduzir o canal
                 // Por exemplo, abrir em um player ou copiar a URL
                 alert(`URL do canal: ${url}\n\nPara reproduzir, use um player compatível com M3U.`);
+            }
+            
+            // Método para adicionar novas URLs de lista
+            addListUrl(listName, url) {
+                this.m3uUrls[listName] = url;
+                console.log(`URL adicionada para lista ${listName}: ${url}`);
             }
         }
         
