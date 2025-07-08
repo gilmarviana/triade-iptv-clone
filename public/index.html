@@ -452,5 +452,74 @@
     
     <noscript>Você precisa habilitar o JavaScript para rodar este app.</noscript>
     <div id="root"></div>
+    
+    <!-- Google Analytics e Tag Manager - Carregamento otimizado -->
+    <script>
+      // Sistema de analytics otimizado - carregamento condicional
+      (function() {
+        'use strict';
+        
+        // Carregar analytics apenas após interação do usuário
+        function initAnalytics() {
+          // Verificar se já foi carregado
+          if (window.analyticsLoaded) return;
+          
+          // Aguardar interação do usuário
+          const events = ['click', 'scroll', 'keydown', 'touchstart'];
+          let hasInteracted = false;
+          
+          function loadAnalytics() {
+            if (hasInteracted) return;
+            hasInteracted = true;
+            
+            // Remover listeners
+            events.forEach(event => document.removeEventListener(event, loadAnalytics));
+            
+            // Carregar Google Analytics apenas se o usuário interagiu por mais de 5 segundos
+            setTimeout(() => {
+              if (!window.gtag) {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+                script.onload = function() {
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  window.gtag = gtag;
+                  gtag('js', new Date());
+                  gtag('config', 'G-XXXXXXXXXX', {
+                    'page_title': 'IPTV Barato - A melhor lista IPTV do Brasil',
+                    'page_location': 'https://iptvbarato.site/',
+                    'send_page_view': false
+                  });
+                };
+                script.onerror = function() {
+                  console.warn('Google Analytics não pôde ser carregado');
+                };
+                document.head.appendChild(script);
+              }
+            }, 2000);
+          }
+          
+          // Adicionar listeners para interação
+          events.forEach(event => document.addEventListener(event, loadAnalytics, { once: true }));
+          
+          // Fallback: carregar após 20 segundos apenas se o usuário ainda estiver na página
+          setTimeout(() => {
+            if (document.visibilityState === 'visible') {
+              loadAnalytics();
+            }
+          }, 20000);
+          
+          window.analyticsLoaded = true;
+        }
+        
+        // Inicializar quando o DOM estiver pronto
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initAnalytics);
+        } else {
+          initAnalytics();
+        }
+      })();
+    </script>
   </body>
 </html>

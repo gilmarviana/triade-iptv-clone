@@ -1,12 +1,11 @@
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
 module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
-      // Otimizações básicas para produção
+      // Otimizações para produção
       if (env === 'production') {
-        // Desabilitar source maps em produção
-        webpackConfig.devtool = false;
-        
-        // Otimizações básicas de bundle
+        // Otimizações de bundle
         webpackConfig.optimization.splitChunks = {
           chunks: 'all',
           cacheGroups: {
@@ -14,9 +13,30 @@ module.exports = {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
               chunks: 'all',
+              priority: 10
+            },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 5
             }
-          },
+          }
         };
+
+        // Desabilitar source maps em produção
+        webpackConfig.devtool = false;
+      }
+
+      // Adicionar Bundle Analyzer se solicitado
+      if (process.env.ANALYZE === 'true') {
+        webpackConfig.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+            reportFilename: 'bundle-report.html'
+          })
+        );
       }
 
       return webpackConfig;
