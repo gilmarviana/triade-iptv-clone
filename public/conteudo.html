@@ -482,17 +482,14 @@
                 <button class="tab-btn active" data-list="lunar" onclick="m3uManager.switchList('lunar')">
                     🌙 Lista Padrão Lunar
                 </button>
+                <button class="tab-btn" data-list="solar" onclick="m3uManager.switchList('solar')">
+                    ☀️ Lista Padrão Solar
+                </button>
                 <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
                     ⭐ Lista Premium
                 </button>
                 <button class="tab-btn" data-list="superpremium" onclick="m3uManager.switchList('superpremium')">
                     💎 Super Premium
-                </button>
-                <button class="tab-btn" data-list="esportes" onclick="m3uManager.switchList('esportes')">
-                    ⚽ Lista Esportes
-                </button>
-                <button class="tab-btn" data-list="filmes" onclick="m3uManager.switchList('filmes')">
-                    🎬 Lista Filmes
                 </button>
             </div>
         </div>
@@ -554,10 +551,9 @@
                 this.currentList = 'lunar';
                 this.m3uUrls = {
                     lunar: 'http://nplaylunar.shop/get.php?username=98809226&password=12506682&type=m3u_plus&output=mpegts',
+                    solar: 'http://nplaysolar.shop/get.php?username=43136813&password=28414831&type=m3u_plus&output=mpegts',
                     premium: 'http://iza002.online/get.php?username=aa9y42&password=7hckhc&type=m3u_plus&output=m3u8',
-                    superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=mpegts',
-                    esportes: '', // Será adicionado quando você enviar o link
-                    filmes: '' // Será adicionado quando você enviar o link
+                    superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=mpegts'
                 };
                 this.channels = {};
                 this.filteredChannels = [];
@@ -641,10 +637,9 @@
             getListDisplayName() {
                 const names = {
                     lunar: 'Padrão Lunar',
+                    solar: 'Padrão Solar',
                     premium: 'Premium',
-                    superpremium: 'Super Premium',
-                    esportes: 'Esportes',
-                    filmes: 'Filmes'
+                    superpremium: 'Super Premium'
                 };
                 return names[this.currentList] || this.currentList;
             }
