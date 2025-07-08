@@ -125,6 +125,20 @@
   RewriteRule ^baratoiptv\.html$ / [R=301,L]
   RewriteRule ^seo-iptv-barato\.html$ / [R=301,L]
   
+  # Redirecionar URLs de WordPress inexistentes
+  RewriteRule ^feed/?$ / [R=301,L]
+  RewriteRule ^search/ / [R=301,L]
+  RewriteRule ^wp-login\.php / [R=301,L]
+  RewriteRule ^wp-admin/ / [R=301,L]
+  RewriteRule ^wp-content/ / [R=301,L]
+  RewriteRule ^wp-includes/ / [R=301,L]
+  RewriteRule ^wp-json/ / [R=301,L]
+  RewriteRule ^xmlrpc\.php / [R=301,L]
+  
+  # Redirecionar URLs de busca com parâmetros
+  RewriteCond %{QUERY_STRING} ^s= [NC]
+  RewriteRule ^$ / [R=301,L]
+  
   # Remover extensões de arquivo
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f

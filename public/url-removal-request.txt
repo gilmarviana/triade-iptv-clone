@@ -1,0 +1,33 @@
+INSTRUÇÕES PARA REMOÇÃO DE URLs NO GOOGLE SEARCH CONSOLE
+========================================================
+
+URLs que devem ser removidas do índice do Google:
+
+1. https://iptvbarato.site/feed/
+2. https://iptvbarato.site/search/{search_term_string}/feed/rss2/
+3. https://iptvbarato.site/?s={search_term_string}
+4. https://iptvbarato.site/wp-login.php?action=googlesitekit_auth
+
+PASSOS PARA REMOÇÃO:
+
+1. Acesse o Google Search Console
+2. Vá para "Remoções" no menu lateral
+3. Clique em "Solicitar remoção"
+4. Adicione cada URL individualmente
+5. Selecione "Remover URL temporariamente"
+6. Aguarde a confirmação do Google
+
+MEDIDAS IMPLEMENTADAS:
+
+✅ robots.txt atualizado com Disallow para essas URLs
+✅ .htaccess configurado com redirecionamentos 301
+✅ Meta tags noindex adicionadas
+✅ Página 404 personalizada criada
+
+MONITORAMENTO:
+
+- Verificar semanalmente no Google Search Console
+- Confirmar que as URLs não aparecem mais nos resultados
+- Manter as configurações ativas para evitar reindexação
+
+ÚLTIMA ATUALIZAÇÃO: 19/12/2024 

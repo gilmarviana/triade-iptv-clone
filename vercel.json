@@ -85,6 +85,42 @@
     {
       "src": "/404",
       "dest": "/404.html"
+    },
+    {
+      "src": "/feed",
+      "dest": "/"
+    },
+    {
+      "src": "/feed/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/search/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/wp-login.php",
+      "dest": "/"
+    },
+    {
+      "src": "/wp-admin/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/wp-content/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/wp-includes/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/wp-json/(.*)",
+      "dest": "/"
+    },
+    {
+      "src": "/xmlrpc.php",
+      "dest": "/"
     }
   ]
 } 

@@ -70,6 +70,12 @@
     <priority>0.8</priority>
   </url>
   
+  <!-- URLs Excluídas do Sitemap (não indexadas) -->
+  <!-- https://iptvbarato.site/feed/ - Feed RSS inexistente -->
+  <!-- https://iptvbarato.site/search/ - Busca inexistente -->
+  <!-- https://iptvbarato.site/wp-login.php - Login WordPress inexistente -->
+  <!-- https://iptvbarato.site/?s= - Parâmetros de busca inexistentes -->
+  
 
   
   <url>
