@@ -303,6 +303,17 @@
             display: inline-block;
         }
         
+        .content-source {
+            font-size: 0.8rem;
+            color: #ffb300;
+            background: rgba(255, 179, 0, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
         .loading {
             text-align: center;
             padding: 3rem;
@@ -516,6 +527,9 @@
                 <button class="search-btn" id="searchBtn" onclick="m3uManager.search()">
                     🔍 Pesquisar
                 </button>
+                <button class="search-btn btn-secondary" id="globalSearchBtn" onclick="m3uManager.toggleGlobalSearch()">
+                    🌐 Busca Global
+                </button>
             </div>
             
             <div class="stats" id="stats" style="display: none;">
@@ -561,6 +575,7 @@
                 this.currentPage = 1;
                 this.itemsPerPage = 20;
                 this.hasSearched = false;
+                this.isGlobalSearch = false; // Novo: para controlar busca global
                 
                 this.init();
             }
@@ -636,25 +651,19 @@
                 `;
             }
             
-            getListDisplayName() {
+            getListDisplayName(listName = null) {
                 const names = {
                     lunar: 'Padrão Lunar',
                     solar: 'Padrão Solar',
                     premium: 'Premium',
                     superpremium: 'Super Premium'
                 };
-                return names[this.currentList] || this.currentList;
+                return names[listName || this.currentList] || (listName || this.currentList);
             }
             
             async search() {
                 const searchBtn = document.getElementById('searchBtn');
                 const searchInput = document.getElementById('searchInput');
-                
-                // Verificar se há URL para a lista atual
-                if (!this.m3uUrls[this.currentList]) {
-                    this.showError(`URL da lista ${this.getListDisplayName()} ainda não foi configurada.`);
-                    return;
-                }
                 
                 // Verificar se há termo de busca
                 if (!searchInput.value.trim()) {
@@ -664,18 +673,28 @@
                 
                 // Desabilitar botão durante carregamento
                 searchBtn.disabled = true;
-                searchBtn.textContent = '⏳ Carregando...';
+                searchBtn.textContent = this.isGlobalSearch ? '⏳ Carregando Global...' : '⏳ Carregando...';
                 
                 try {
-                    // Carregar conteúdo se ainda não foi carregado
-                    if (!this.channels[this.currentList]) {
-                        await this.loadM3UContent();
+                    if (this.isGlobalSearch) {
+                        await this.searchGlobal();
+                    } else {
+                        // Verificar se há URL para a lista atual
+                        if (!this.m3uUrls[this.currentList]) {
+                            this.showError(`URL da lista ${this.getListDisplayName()} ainda não foi configurada.`);
+                            return;
+                        }
+                        
+                        // Carregar conteúdo se ainda não foi carregado
+                        if (!this.channels[this.currentList]) {
+                            await this.loadM3UContent();
+                        }
+                        
+                        this.hasSearched = true;
+                        this.filterContent();
+                        this.updateStats();
+                        this.displayContent();
                     }
-                    
-                    this.hasSearched = true;
-                    this.filterContent();
-                    this.updateStats();
-                    this.displayContent();
                     
                 } catch (error) {
                     this.showError('Erro ao carregar o conteúdo. Tente novamente.');
@@ -683,8 +702,50 @@
                 } finally {
                     // Reabilitar botão
                     searchBtn.disabled = false;
-                    searchBtn.textContent = '🔍 Pesquisar';
+                    searchBtn.textContent = this.isGlobalSearch ? '🔍 Pesquisar Global' : '🔍 Pesquisar';
                 }
+            }
+            
+            async searchGlobal() {
+                const searchTerm = this.normalizeText(document.getElementById('searchInput').value.toLowerCase());
+                const allResults = [];
+                
+                // Buscar em todas as listas
+                for (const [listName, url] of Object.entries(this.m3uUrls)) {
+                    try {
+                        // Carregar conteúdo se ainda não foi carregado
+                        if (!this.channels[listName]) {
+                            await this.loadM3UContentForList(listName, url);
+                        }
+                        
+                        // Filtrar resultados desta lista
+                        const listChannels = this.channels[listName] || [];
+                        const filteredResults = listChannels.filter(channel => {
+                            const normalizedName = this.normalizeText(channel.name.toLowerCase());
+                            const normalizedCategory = this.normalizeText(channel.groupTitle.toLowerCase());
+                            
+                            return normalizedName.includes(searchTerm) ||
+                                   normalizedCategory.includes(searchTerm);
+                        });
+                        
+                        // Adicionar informação da lista a cada resultado
+                        filteredResults.forEach(channel => {
+                            allResults.push({
+                                ...channel,
+                                sourceList: listName,
+                                sourceListName: this.getListDisplayName(listName)
+                            });
+                        });
+                        
+                    } catch (error) {
+                        console.error(`Erro ao carregar lista ${listName}:`, error);
+                    }
+                }
+                
+                this.filteredChannels = allResults;
+                this.currentPage = 1;
+                this.updateStats();
+                this.displayContent();
             }
             
             async loadM3UContent() {
@@ -695,6 +756,16 @@
                 
                 const content = await response.text();
                 this.parseM3UContent(content);
+            }
+            
+            async loadM3UContentForList(listName, url) {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Falha ao carregar a lista ${listName}`);
+                }
+                
+                const content = await response.text();
+                this.parseM3UContentForList(content, listName);
             }
             
             parseM3UContent(content) {
@@ -724,6 +795,26 @@
                 this.channels[this.currentList] = channels;
                 this.categories = categories;
                 this.filteredChannels = [...channels];
+            }
+            
+            parseM3UContentForList(content, listName) {
+                const lines = content.split('\n');
+                let currentChannel = null;
+                const channels = [];
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    
+                    if (line.startsWith('#EXTINF:')) {
+                        currentChannel = this.parseChannelInfo(line);
+                    } else if (line.startsWith('http') && currentChannel) {
+                        currentChannel.url = line;
+                        channels.push(currentChannel);
+                        currentChannel = null;
+                    }
+                }
+                
+                this.channels[listName] = channels;
             }
             
             parseChannelInfo(line) {
@@ -765,7 +856,7 @@
             }
             
             filterContent() {
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const searchTerm = this.normalizeText(document.getElementById('searchInput').value.toLowerCase());
                 const selectedCategory = document.getElementById('categoryFilter').value;
                 const selectedQuality = document.getElementById('qualityFilter').value;
                 
@@ -773,9 +864,12 @@
                 
                 // Primeiro filtro: apenas por termo de busca
                 let filteredBySearch = channels.filter(channel => {
+                    const normalizedName = this.normalizeText(channel.name.toLowerCase());
+                    const normalizedCategory = this.normalizeText(channel.groupTitle.toLowerCase());
+                    
                     return !searchTerm || 
-                        channel.name.toLowerCase().includes(searchTerm) ||
-                        channel.groupTitle.toLowerCase().includes(searchTerm);
+                        normalizedName.includes(searchTerm) ||
+                        normalizedCategory.includes(searchTerm);
                 });
                 
                 // Atualizar categorias baseadas nos resultados da busca
@@ -801,13 +895,16 @@
                 const selectedQuality = document.getElementById('qualityFilter').value;
                 
                 const channels = this.channels[this.currentList] || [];
-                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const searchTerm = this.normalizeText(document.getElementById('searchInput').value.toLowerCase());
                 
                 // Primeiro filtrar por busca (mantém os resultados da busca original)
                 let filteredBySearch = channels.filter(channel => {
+                    const normalizedName = this.normalizeText(channel.name.toLowerCase());
+                    const normalizedCategory = this.normalizeText(channel.groupTitle.toLowerCase());
+                    
                     return !searchTerm || 
-                        channel.name.toLowerCase().includes(searchTerm) ||
-                        channel.groupTitle.toLowerCase().includes(searchTerm);
+                        normalizedName.includes(searchTerm) ||
+                        normalizedCategory.includes(searchTerm);
                 });
                 
                 // Depois aplicar filtros de categoria e qualidade
@@ -824,6 +921,17 @@
                 this.currentPage = 1;
                 this.updateStats();
                 this.displayContent();
+            }
+            
+            // Função para normalizar texto (remover acentos e caracteres especiais)
+            normalizeText(text) {
+                return text
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                    .replace(/[&]/g, 'e') // Substitui & por e
+                    .replace(/[^a-z0-9\s]/g, '') // Remove caracteres especiais exceto espaços
+                    .replace(/\s+/g, ' ') // Normaliza espaços múltiplos
+                    .trim();
             }
             
             updateCategoryFilter(channels) {
@@ -876,15 +984,22 @@
                     return;
                 }
                 
-                const contentHTML = pageChannels.map(channel => `
-                    <div class="content-item" onclick="m3uManager.playChannel('${channel.url}')">
-                        <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
-                             onerror="this.src='/logo-iptv.png'">
-                        <div class="content-title">${channel.name}</div>
-                        <div class="content-category">${channel.groupTitle}</div>
-                        <div class="content-quality">${channel.quality}</div>
-                    </div>
-                `).join('');
+                const contentHTML = pageChannels.map(channel => {
+                    // Determinar se é busca global e mostrar origem da lista
+                    const sourceInfo = this.isGlobalSearch && channel.sourceListName ? 
+                        `<div class="content-source">📺 ${channel.sourceListName}</div>` : '';
+                    
+                    return `
+                        <div class="content-item" onclick="m3uManager.playChannel('${channel.url}')">
+                            <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
+                                 onerror="this.src='/logo-iptv.png'">
+                            <div class="content-title">${channel.name}</div>
+                            <div class="content-category">${channel.groupTitle}</div>
+                            ${sourceInfo}
+                            <div class="content-quality">${channel.quality}</div>
+                        </div>
+                    `;
+                }).join('');
                 
                 contentDiv.innerHTML = `
                     <div class="content-grid">
@@ -936,11 +1051,33 @@
             
             updateStats() {
                 const statsDiv = document.getElementById('stats');
-                const channels = this.channels[this.currentList] || [];
                 
-                document.getElementById('totalChannels').textContent = channels.length;
-                document.getElementById('filteredChannels').textContent = this.filteredChannels.length;
-                document.getElementById('categories').textContent = this.categories.size;
+                if (this.isGlobalSearch) {
+                    // Estatísticas para busca global
+                    const totalChannels = Object.values(this.channels).reduce((total, list) => total + (list ? list.length : 0), 0);
+                    const uniqueCategories = new Set();
+                    
+                    Object.values(this.channels).forEach(list => {
+                        if (list) {
+                            list.forEach(channel => {
+                                if (channel.groupTitle) {
+                                    uniqueCategories.add(channel.groupTitle);
+                                }
+                            });
+                        }
+                    });
+                    
+                    document.getElementById('totalChannels').textContent = totalChannels;
+                    document.getElementById('filteredChannels').textContent = this.filteredChannels.length;
+                    document.getElementById('categories').textContent = uniqueCategories.size;
+                } else {
+                    // Estatísticas para busca individual
+                    const channels = this.channels[this.currentList] || [];
+                    
+                    document.getElementById('totalChannels').textContent = channels.length;
+                    document.getElementById('filteredChannels').textContent = this.filteredChannels.length;
+                    document.getElementById('categories').textContent = this.categories.size;
+                }
                 
                 statsDiv.style.display = 'flex';
             }
@@ -960,9 +1097,15 @@
                 document.getElementById('searchInput').value = '';
                 document.getElementById('categoryFilter').value = '';
                 document.getElementById('qualityFilter').value = '';
-                this.hasSearched = false;
-                this.showWelcomeMessage();
-                document.getElementById('stats').style.display = 'none';
+                
+                if (this.isGlobalSearch) {
+                    // Se estiver em busca global, voltar para busca individual
+                    this.toggleGlobalSearch();
+                } else {
+                    this.hasSearched = false;
+                    this.showWelcomeMessage();
+                    document.getElementById('stats').style.display = 'none';
+                }
             }
             
             playChannel(url) {
@@ -975,6 +1118,33 @@
             addListUrl(listName, url) {
                 this.m3uUrls[listName] = url;
                 console.log(`URL adicionada para lista ${listName}: ${url}`);
+            }
+
+            toggleGlobalSearch() {
+                this.isGlobalSearch = !this.isGlobalSearch;
+                const searchInput = document.getElementById('searchInput');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const qualityFilter = document.getElementById('qualityFilter');
+                const searchBtn = document.getElementById('searchBtn');
+                const globalSearchBtn = document.getElementById('globalSearchBtn');
+
+                if (this.isGlobalSearch) {
+                    searchInput.placeholder = 'Digite o nome do canal, filme ou série... (Busca Global)';
+                    categoryFilter.disabled = true;
+                    qualityFilter.disabled = true;
+                    searchBtn.textContent = '🔍 Pesquisar Global';
+                    globalSearchBtn.textContent = '🔍 Pesquisar Individual';
+                    this.filteredChannels = []; // Limpar resultados da busca individual
+                    this.updateStats();
+                    this.displayContent();
+                } else {
+                    searchInput.placeholder = 'Digite o nome do canal, filme ou série...';
+                    categoryFilter.disabled = false;
+                    qualityFilter.disabled = false;
+                    searchBtn.textContent = '🔍 Pesquisar';
+                    globalSearchBtn.textContent = '🌐 Busca Global';
+                    this.search(); // Re-executar busca individual
+                }
             }
         }
         

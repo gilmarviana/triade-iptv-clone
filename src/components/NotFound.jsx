@@ -6,14 +6,6 @@ const NotFound = () => {
     // Atualizar o título da página
     document.title = 'Página Não Encontrada - IPTV Barato | 404';
     
-    // Analytics para página 404
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'page_view', {
-        'page_title': '404 - Página Não Encontrada',
-        'page_location': window.location.href
-      });
-    }
-    
     // Prevenir cache da página 404
     if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
       window.location.reload();
