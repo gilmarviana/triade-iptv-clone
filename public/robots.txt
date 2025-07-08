@@ -43,6 +43,9 @@ Disallow: /iptvbarato
 Disallow: /baratoiptv.html
 Disallow: /seo-iptv-barato.html
 
+# Permitir página 404 personalizada
+Allow: /404.html
+
 # Bloquear extensões de arquivo desnecessárias
 Disallow: /*.json$
 Disallow: /*.xml$

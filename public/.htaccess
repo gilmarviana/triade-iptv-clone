@@ -131,9 +131,12 @@
   RewriteRule ^([^\.]+)$ $1.html [NC,L]
 </IfModule>
 
-# Configurações para React Router (SPA)
+# Configurações para React Router (SPA) e Página 404
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  
+  # Página 404 personalizada
+  ErrorDocument 404 /404.html
   
   # Se o arquivo/diretório não existe, redirecionar para index.html
   RewriteCond %{REQUEST_FILENAME} !-f

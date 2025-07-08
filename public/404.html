@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Página Não Encontrada - IPTV Barato | 404</title>
+    <meta name="description" content="Página não encontrada. Volte para a página principal do IPTV Barato e descubra os melhores planos a partir de R$10,00 com teste grátis.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://iptvbarato.site/">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://iptvbarato.site/404">
+    <meta property="og:title" content="Página Não Encontrada - IPTV Barato">
+    <meta property="og:description" content="Página não encontrada. Volte para a página principal do IPTV Barato.">
+    <meta property="og:image" content="https://iptvbarato.site/logo-iptv.png">
+    
+    <!-- Fonts -->
+    <link rel="preload" href="/fonts/Montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Montserrat-600.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/Montserrat-700.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-400.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-600.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('/fonts/Montserrat-700.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #181c2f 0%, #2c3e50 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            color: #ffb300;
+            text-shadow: 0 4px 20px rgba(255, 179, 0, 0.5);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .error-message {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #bdc3c7;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-box {
+            margin-bottom: 2rem;
+            position: relative;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: #bdc3c7;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #ffb300;
+            box-shadow: 0 0 20px rgba(255, 179, 0, 0.3);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 179, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        .popular-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .popular-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #ffb300;
+        }
+        
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .link-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            border-color: #ffb300;
+        }
+        
+        .link-item h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #ffb300;
+        }
+        
+        .link-item p {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 10px rgba(255, 179, 0, 0.3));
+        }
+        
+        @media (max-width: 768px) {
+            .error-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-title {
+                font-size: 1.3rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Animação de entrada */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .error-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Efeito de brilho */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 179, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 179, 0, 0.6);
+            }
+        }
+        
+        .error-code {
+            animation: glow 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img src="/logo-iptv.png" alt="IPTV Barato" class="logo">
+        
+        <div class="error-code">404</div>
+        
+        <h1 class="error-title">Página Não Encontrada</h1>
+        
+        <p class="error-message">
+            Ops! A página que você está procurando não existe ou foi movida. 
+            Não se preocupe, você ainda pode encontrar tudo o que precisa aqui!
+        </p>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="O que você está procurando?" id="searchInput">
+        </div>
+        
+        <div>
+            <a href="/" class="btn">Voltar ao Início</a>
+            <a href="/#planos" class="btn btn-secondary">Ver Planos</a>
+        </div>
+        
+        <div class="popular-links">
+            <h3>Páginas Populares</h3>
+            <div class="links-grid">
+                <a href="/#planos" class="link-item">
+                    <h4>📺 Planos IPTV</h4>
+                    <p>A partir de R$10,00/mês</p>
+                </a>
+                <a href="/#teste-gratis" class="link-item">
+                    <h4>🎁 Teste Grátis</h4>
+                    <p>4 horas de teste gratuito</p>
+                </a>
+                <a href="/#filmes-em-cartaz" class="link-item">
+                    <h4>🎬 Filmes & Séries</h4>
+                    <p>Milhares de títulos</p>
+                </a>
+                <a href="/#futebol" class="link-item">
+                    <h4>⚽ Futebol ao Vivo</h4>
+                    <p>Todos os campeonatos</p>
+                </a>
+                <a href="/#faq" class="link-item">
+                    <h4>❓ Dúvidas</h4>
+                    <p>Perguntas frequentes</p>
+                </a>
+                <a href="/#contato" class="link-item">
+                    <h4>💬 Suporte</h4>
+                    <p>Atendimento 24h</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Funcionalidade de busca
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    // Redirecionar para a página principal com o termo de busca
+                    window.location.href = `/?search=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+        
+        // Foco automático no campo de busca
+        document.getElementById('searchInput').focus();
+        
+        // Analytics para página 404 (opcional)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                'page_title': '404 - Página Não Encontrada',
+                'page_location': window.location.href
+            });
+        }
+        
+        // Prevenir cache da página 404
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html> 

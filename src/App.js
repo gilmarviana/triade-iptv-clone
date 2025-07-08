@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Listas from './components/Listas';
-
-
 import Planos from './components/Planos';
 import FAQ from './components/FAQ';
 import Contato from './components/Contato';
 import Footer from './components/Footer';
 import WhatsappFloat from './components/WhatsappFloat';
 import GTMLoader from './components/GTMLoader';
+import NotFound from './components/NotFound';
 
 // Importar utilitários de performance
 import { initAnalyticsOnInteraction } from './utils/scriptLoader';
@@ -64,19 +64,28 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Header />
-      <main>
-        <Hero />
-        <Listas />
-        <Planos />
-        <FAQ />
-        <Contato />
-      </main>
-      <Footer />
-      <WhatsappFloat />
-      <GTMLoader />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Header />
+              <main>
+                <Hero />
+                <Listas />
+                <Planos />
+                <FAQ />
+                <Contato />
+              </main>
+              <Footer />
+              <WhatsappFloat />
+              <GTMLoader />
+            </>
+          } />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
