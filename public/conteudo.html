@@ -477,14 +477,92 @@
                 font-size: 0.9rem;
             }
         }
+        
+        /* Estilos do Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .header__logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #ffb300;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .header__logo-img {
+            width: 40px;
+            height: 45px;
+            margin-right: 0.5rem;
+            object-fit: contain;
+        }
+        
+        .header__nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .header__nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .header__nav a:hover {
+            color: #ffb300;
+        }
+        
+        .header__teste-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .header__teste-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 179, 0, 0.4);
+        }
     </style>
 </head>
 <body>
+<header class="header">
+  <div class="header__logo">
+    <img src="/images/optimized/logo-iptv-70.png" class="header__logo-img" alt="Logo Barato IPTV" width="40" height="45" style="object-fit:contain;">
+  </div>
+  <nav class="header__nav">
+    <a href="/#inicio">Início</a>
+    <a href="/#planos">Planos</a>
+    <a href="/#listas">Listas</a>
+    <a href="/conteudo.html">Conteúdo</a>
+    <a href="/#filmes-em-cartaz">Filmes em Cartaz</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/#contato">Contato</a>
+  </nav>
+  <a href="https://api.whatsapp.com/send?phone=5519998305956&text=Ol%C3%A1,%20Gostaria%20de%20testar%20o%20Barato%20IPTV!" class="header__teste-btn" target="_blank" rel="noopener noreferrer">Teste Agora</a>
+</header>
     <div class="container">
-        <div class="header">
-            <img src="/logo-iptv.png" alt="IPTV Barato" class="logo">
-            <h1 class="title">Conteúdo IPTV</h1>
-            <p class="subtitle">Explore milhares de canais, filmes e séries com nosso sistema de busca avançado</p>
+        <div class="header" style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;background:rgba(0,0,0,0.15);padding:1.5rem 2rem 1.5rem 1rem;border-radius:0 0 18px 18px;box-shadow:0 2px 12px #0002;">
+            <h1 class="title" style="margin-bottom:0;color:#ffb300;font-size:2.2rem;text-align:center;">Conteúdo IPTV</h1>
+            <p class="subtitle" style="margin:0;color:#fff;font-size:1.1rem;font-weight:400;text-align:center;">Explore milhares de canais, filmes e séries com nosso sistema de busca avançado</p>
         </div>
         
         <!-- Abas de Listas -->
@@ -557,6 +635,18 @@
         </div>
         
         <div class="pagination" id="pagination"></div>
+    </div>
+    
+    <!-- Modal para sinopse -->
+    <div id="synopsisModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;" onclick="if(event.target===this){this.style.display='none';}">
+      <div style="background:#23243a;padding:2rem 1.5rem 1.5rem 1.5rem;border-radius:16px;max-width:520px;width:95vw;box-shadow:0 8px 32px #000a;position:relative;color:#fff;display:flex;flex-direction:column;align-items:center;max-height:90vh;overflow-y:auto;">
+        <button onclick="document.getElementById('synopsisModal').style.display='none'" style="position:absolute;top:10px;right:18px;background:none;border:none;color:#fff;font-size:1.7rem;cursor:pointer;">&times;</button>
+        <img id="synopsisBanner" src="" alt="Banner" style="display:none;max-width:100%;border-radius:10px;margin-bottom:1rem;box-shadow:0 2px 12px #0007;">
+        <h2 id="synopsisTitle" style="margin-top:0;font-size:1.3rem;color:#ffb300;text-align:center;"></h2>
+        <p id="synopsisText" style="font-size:1.05rem;line-height:1.5;margin-bottom:0.7rem;text-align:center;"></p>
+        <div id="synopsisCarousel" style="display:none;width:100%;margin:1rem 0;"></div>
+        <div id="synopsisTrailerContainer" style="display:none;width:100%;max-width:420px;margin:0 auto 0.5rem auto;"></div>
+      </div>
     </div>
     
     <script>
@@ -988,9 +1078,8 @@
                     // Determinar se é busca global e mostrar origem da lista
                     const sourceInfo = this.isGlobalSearch && channel.sourceListName ? 
                         `<div class="content-source">📺 ${channel.sourceListName}</div>` : '';
-                    
                     return `
-                        <div class="content-item" onclick="m3uManager.playChannel('${channel.url}')">
+                        <div class="content-item" onclick="m3uManager.playChannel('${channel.url}', '${channel.name.replace(/'/g, '\'')}')">
                             <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
                                  onerror="this.src='/logo-iptv.png'">
                             <div class="content-title">${channel.name}</div>
@@ -1108,12 +1197,184 @@
                 }
             }
             
-            playChannel(url) {
-                // Aqui você pode implementar a lógica para reproduzir o canal
-                // Por exemplo, abrir em um player ou copiar a URL
-                alert(`URL do canal: ${url}\n\nPara reproduzir, use um player compatível com M3U.`);
+            // Função para buscar sinopse e banner usando a API já existente do site, com busca mais flexível
+            async fetchSynopsis(title) {
+              try {
+                let queries = [title];
+                // Remove ano, parênteses, siglas comuns e símbolos
+                let semAno = title.replace(/\s*\(\d{4}\)/, '').replace(/\(.*?\)/g, '').trim();
+                let semSiglas = semAno.replace(/\b(LEG|DUB|NAC|ESP|PT|EN|LAT|SUB|HD|FHD|4K|SD|1080P|720P|480P)\b/gi, '').trim();
+                let semEComercial = semSiglas.replace(/&/g, 'e');
+                let semNumeros = semEComercial.replace(/\d+/g, '').trim();
+                // Tenta minúsculas
+                queries.push(title.toLowerCase());
+                // Tenta sem acentos
+                if (title.normalize) {
+                  queries.push(title.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+                }
+                // Tenta remover artigos comuns em português
+                let semArtigos = semEComercial.replace(/^(o|a|os|as|um|uma|uns|umas|the|a|an)\s+/i, '').trim();
+                if (semArtigos !== semEComercial) queries.push(semArtigos);
+                // Tenta nome base sem número
+                if (semNumeros !== semEComercial) queries.push(semNumeros);
+                // Tenta variação com número romano se for Fast & Furious
+                let matchVelozes = /velozes.*furiosos\s*(\d+)/i.exec(title);
+                if (matchVelozes) {
+                  const num = matchVelozes[1];
+                  const roman = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'][parseInt(num)-1] || num;
+                  queries.push(`Fast and Furious ${num}`);
+                  queries.push(`Fast and Furious ${roman}`);
+                  queries.push(`Fast & Furious ${num}`);
+                  queries.push(`Fast & Furious ${roman}`);
+                  queries.push(`Velozes e Furiosos ${num}`);
+                  queries.push(`Velozes e Furiosos ${roman}`);
+                  // Sempre tentar Fast X e Velozes e Furiosos X para o 10
+                  if (num === '10' || roman === 'X') {
+                    queries.push('Fast X');
+                    queries.push('Velozes e Furiosos X');
+                    queries.push('Fast & Furious 10');
+                    queries.push('Fast & Furious X');
+                  }
+                } else if (/velozes.*furiosos/i.test(title)) {
+                  queries.push('Fast and Furious');
+                  queries.push('The Fast and the Furious');
+                }
+                // Heurística para spin-off: subtítulo isolado e nome em inglês
+                let spinOffMatch = /velozes.*furiosos[:\- ]+(.+)/i.exec(title);
+                if (spinOffMatch) {
+                  let subtitulo = spinOffMatch[1].replace(/\(.*?\)/g, '').replace(/\d{4}/g, '').replace(/4K|FHD|HD|SD|LEG|DUB|NAC|ESP|PT|EN|LAT|SUB/gi, '').trim();
+                  if (subtitulo) {
+                    queries.push(subtitulo);
+                    queries.push(subtitulo.toLowerCase());
+                    if (subtitulo.normalize) queries.push(subtitulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+                    // Tenta subtítulo em inglês se for Hobbs & Shaw
+                    if (/hobbs.*shaw/i.test(subtitulo)) {
+                      queries.push('Fast & Furious Presents: Hobbs & Shaw');
+                      queries.push('Hobbs & Shaw');
+                      queries.push('Hobbs and Shaw');
+                      queries.push('Fast and Furious Hobbs and Shaw');
+                      queries.push('Fast & Furious Hobbs & Shaw');
+                    }
+                    // Tenta variações para Desafio em Tóquio/Tokyo Drift
+                    if (/desafio.*toquio/i.test(subtitulo) || /tokyo drift/i.test(subtitulo)) {
+                      queries.push('Desafio em Tóquio');
+                      queries.push('Tokyo Drift');
+                      queries.push('Velozes e Furiosos: Tokyo Drift');
+                      queries.push('Velozes e Furiosos Tokyo Drift');
+                      queries.push('Velozes e Furiosos 3');
+                      queries.push('Fast and Furious: Tokyo Drift');
+                      queries.push('Fast & Furious: Tokyo Drift');
+                      queries.push('The Fast and the Furious: Tokyo Drift');
+                      queries.push('Fast and Furious Tokyo Drift');
+                      queries.push('Fast & Furious Tokyo Drift');
+                      queries.push('The Fast and the Furious Tokyo Drift');
+                      queries.push('Fast and Furious 3');
+                      queries.push('Fast & Furious 3');
+                      queries.push('The Fast and the Furious 3');
+                    }
+                  }
+                }
+                // Remove espaços duplicados
+                queries = queries.map(q => q.replace(/\s{2,}/g, ' ').trim());
+                // Remove duplicatas
+                queries = [...new Set(queries)];
+                for (let q of queries) {
+                  const res = await fetch(`/api/imdb-search?query=${encodeURIComponent(q)}`);
+                  if (res.ok) {
+                    const data = await res.json();
+                    if (data && (data.overview || data.banner)) {
+                      return data;
+                    }
+                  }
+                }
+                // fallback para TMDB se não encontrar
+                return await this.fetchSynopsisTMDB(title);
+              } catch (e) {
+                return await this.fetchSynopsisTMDB(title);
+              }
             }
-            
+            // Fallback para TMDB (mantém compatibilidade)
+            async fetchSynopsisTMDB(title) {
+              const apiKey = 'e764afcdb53bf0c30f6c688621da1703';
+              const searchUrl = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&language=pt-BR&query=${encodeURIComponent(title)}`;
+              try {
+                const res = await fetch(searchUrl);
+                const data = await res.json();
+                if (data.results && data.results.length > 0) {
+                  const item = data.results[0];
+                  let images = [];
+                  let trailer = null;
+                  // Buscar imagens adicionais
+                  if (item.media_type === 'movie' || item.media_type === 'tv') {
+                    const imagesUrl = `https://api.themoviedb.org/3/${item.media_type}/${item.id}/images?api_key=${apiKey}`;
+                    const imagesRes = await fetch(imagesUrl);
+                    const imagesData = await imagesRes.json();
+                    if (imagesData.backdrops && imagesData.backdrops.length > 0) {
+                      images = imagesData.backdrops.slice(0, 8).map(img => `https://image.tmdb.org/t/p/w500${img.file_path}`);
+                    }
+                    // Buscar trailer
+                    const videosUrl = `https://api.themoviedb.org/3/${item.media_type}/${item.id}/videos?api_key=${apiKey}&language=pt-BR`;
+                    const videosRes = await fetch(videosUrl);
+                    const videosData = await videosRes.json();
+                    if (videosData.results && videosData.results.length > 0) {
+                      const yt = videosData.results.find(v => v.site === 'YouTube' && v.type === 'Trailer');
+                      if (yt) trailer = yt.key;
+                    }
+                  }
+                  return {
+                    overview: item.overview || 'Sinopse não encontrada.',
+                    banner: item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : null,
+                    images,
+                    trailer
+                  };
+                }
+                return { overview: 'Sinopse não encontrada.', banner: null, images: [], trailer: null };
+              } catch (e) {
+                return { overview: 'Erro ao buscar sinopse.', banner: null, images: [], trailer: null };
+              }
+            }
+            // Substituir playChannel para abrir modal com sinopse e banner
+            async playChannel(url, name) {
+              if (name) {
+                document.getElementById('synopsisTitle').textContent = name;
+                document.getElementById('synopsisText').textContent = 'Buscando sinopse...';
+                document.getElementById('synopsisBanner').style.display = 'none';
+                document.getElementById('synopsisModal').style.display = 'flex';
+                document.getElementById('synopsisCarousel').style.display = 'none';
+                document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                document.getElementById('synopsisCarousel').innerHTML = '';
+                document.getElementById('synopsisTrailerContainer').innerHTML = '';
+                const result = await this.fetchSynopsis(name);
+                document.getElementById('synopsisText').textContent = result.overview || 'Sinopse não encontrada.';
+                // Banner
+                if (result.banner) {
+                  document.getElementById('synopsisBanner').src = result.banner;
+                  document.getElementById('synopsisBanner').style.display = 'block';
+                } else {
+                  document.getElementById('synopsisBanner').style.display = 'none';
+                }
+                // Carrossel de imagens
+                if (result.images && result.images.length > 0) {
+                  const carousel = document.getElementById('synopsisCarousel');
+                  carousel.innerHTML = result.images.map(img => `<img src='${img}' style='max-width:90px;max-height:60px;margin:0 4px 8px 4px;border-radius:7px;box-shadow:0 1px 6px #0007;object-fit:cover;display:inline-block;'>`).join('');
+                  carousel.style.display = 'flex';
+                  carousel.style.flexWrap = 'wrap';
+                  carousel.style.justifyContent = 'center';
+                } else {
+                  document.getElementById('synopsisCarousel').style.display = 'none';
+                }
+                // Trailer
+                if (result.trailer) {
+                  const trailerDiv = document.getElementById('synopsisTrailerContainer');
+                  trailerDiv.innerHTML = `<iframe width='100%' height='220' src='https://www.youtube.com/embed/${result.trailer}' frameborder='0' allowfullscreen style='border-radius:8px;box-shadow:0 1px 8px #0007;'></iframe>`;
+                  trailerDiv.style.display = 'block';
+                } else {
+                  document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                }
+              } else {
+                alert('Nome do conteúdo não encontrado.');
+              }
+            };
             // Método para adicionar novas URLs de lista
             addListUrl(listName, url) {
                 this.m3uUrls[listName] = url;

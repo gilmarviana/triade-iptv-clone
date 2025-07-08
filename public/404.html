@@ -279,9 +279,130 @@
         .error-code {
             animation: glow 2s ease-in-out infinite;
         }
+        
+        /* Estilos do Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background-color: #181c2f;
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .header__logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .header__logo-img {
+            width: 40px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 0.5rem;
+        }
+        
+        .header__nav {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .header__nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .header__nav a:hover {
+            color: #ffb300;
+        }
+        
+        .header__teste-btn {
+            background: linear-gradient(135deg, #ffb300 0%, #ff9800 100%);
+            color: #181c2f;
+            text-decoration: none;
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header__teste-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 179, 0, 0.2);
+            border-radius: 50px;
+            z-index: -1;
+            transition: transform 0.3s ease;
+            transform: scale(0);
+        }
+        
+        .header__teste-btn:hover::before {
+            transform: scale(1);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header__nav {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                display: none;
+            }
+            
+            .header__nav.active {
+                display: flex;
+            }
+            
+            .header__nav a {
+                padding: 0.5rem 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .header__teste-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
+<header class="header">
+  <div class="header__logo">
+    <img src="/images/optimized/logo-iptv-70.png" class="header__logo-img" alt="Logo Barato IPTV" width="40" height="45" style="object-fit:contain;">
+  </div>
+  <nav class="header__nav">
+    <a href="/#inicio">Início</a>
+    <a href="/#planos">Planos</a>
+    <a href="/#listas">Listas</a>
+    <a href="/conteudo.html">Conteúdo</a>
+    <a href="/#filmes-em-cartaz">Filmes em Cartaz</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/#contato">Contato</a>
+  </nav>
+  <a href="https://api.whatsapp.com/send?phone=5519998305956&text=Ol%C3%A1,%20Gostaria%20de%20testar%20o%20Barato%20IPTV!" class="header__teste-btn" target="_blank" rel="noopener noreferrer">Teste Agora</a>
+</header>
     <div class="error-container">
         <img src="/logo-iptv.png" alt="IPTV Barato" class="logo">
         
@@ -363,4 +484,4 @@
         }
     </script>
 </body>
-</html> 
+</html>

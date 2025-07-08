@@ -133,9 +133,69 @@
                 grid-template-columns: 1fr;
             }
         }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #181c2f;
+            color: white;
+            position: relative;
+            z-index: 1000;
+        }
+        .header__logo {
+            display: flex;
+            align-items: center;
+        }
+        .header__logo-img {
+            width: 40px;
+            height: 45px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+        .header__nav {
+            display: flex;
+            gap: 15px;
+        }
+        .header__nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .header__nav a:hover {
+            color: #ffb300;
+        }
+        .header__teste-btn {
+            background: #ffb300;
+            color: #181c2f;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .header__teste-btn:hover {
+            background: #ff9800;
+        }
     </style>
 </head>
 <body>
+<header class="header">
+  <div class="header__logo">
+    <img src="/images/optimized/logo-iptv-70.png" class="header__logo-img" alt="Logo Barato IPTV" width="40" height="45" style="object-fit:contain;">
+  </div>
+  <nav class="header__nav">
+    <a href="/#inicio">Início</a>
+    <a href="/#planos">Planos</a>
+    <a href="/#listas">Listas</a>
+    <a href="/conteudo.html">Conteúdo</a>
+    <a href="/#filmes-em-cartaz">Filmes em Cartaz</a>
+    <a href="/#faq">FAQ</a>
+    <a href="/#contato">Contato</a>
+  </nav>
+  <a href="https://api.whatsapp.com/send?phone=5519998305956&text=Ol%C3%A1,%20Gostaria%20de%20testar%20o%20Barato%20IPTV!" class="header__teste-btn" target="_blank" rel="noopener noreferrer">Teste Agora</a>
+</header>
     <div class="container">
         <h1>IPTV Barato - Melhores Planos e Canais</h1>
         
