@@ -644,20 +644,23 @@
         <!-- Abas de Listas -->
         <div class="tabs-section">
             <div class="tabs-container">
-                <button class="tab-btn active" data-list="lunar" onclick="m3uManager.switchList('lunar')">
-                    🌙 Lista Padrão Lunar
-                </button>
-                <button class="tab-btn" data-list="solar" onclick="m3uManager.switchList('solar')">
-                    ☀️ Lista Padrão Solar
-                </button>
-                <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
-                    ⭐ Premium Iza
+                <button class="tab-btn" data-list="fasthd" onclick="m3uManager.switchList('fasthd')">
+                    ⚡ FastHD
                 </button>
                 <button class="tab-btn" data-list="superpremium" onclick="m3uManager.switchList('superpremium')">
                     💎 Alpha Server
                 </button>
+                <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
+                    ⭐ Premium Iza
+                </button>
                 <button class="tab-btn" data-list="seven" onclick="m3uManager.switchList('seven')">
                     🧿 SEVEN
+                </button>
+                <button class="tab-btn" data-list="lunar" onclick="m3uManager.switchList('lunar')">
+                    🌙 Lista Padrão Lunar
+                </button>
+                <button class="tab-btn" data-list="solar" onclick="m3uManager.switchList('solar')">
+                    ☀️ Lista Padrão Solar
                 </button>
                 <button class="tab-btn" data-list="galaxy" onclick="m3uManager.switchList('galaxy')">
                     🛸 GALAXY
@@ -682,9 +685,6 @@
                 </button>
                 <button class="tab-btn" data-list="tita" onclick="m3uManager.switchList('tita')">
                     👺 TITÃ
-                </button>
-                <button class="tab-btn" data-list="fasthd" onclick="m3uManager.switchList('fasthd')">
-                    ⚡ FastHD
                 </button>
             </div>
         </div>
@@ -757,21 +757,26 @@
     </div>
     
     <!-- Modal para sinopse -->
-    <div id="synopsisModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;" onclick="if(event.target===this){this.style.display='none';}">
+    <div id="synopsisModal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.65);align-items:center;justify-content:center;" onclick="if(event.target===this){m3uManager.closeSynopsisModal();}">
       <div style="background:#23243a;padding:2rem 1.5rem 1.5rem 1.5rem;border-radius:16px;max-width:520px;width:95vw;box-shadow:0 8px 32px #000a;position:relative;color:#fff;display:flex;flex-direction:column;align-items:center;max-height:90vh;overflow-y:auto;">
-        <button onclick="document.getElementById('synopsisModal').style.display='none'" style="position:absolute;top:10px;right:18px;background:none;border:none;color:#fff;font-size:1.7rem;cursor:pointer;">&times;</button>
+        <button onclick="m3uManager.closeSynopsisModal()" style="position:absolute;top:10px;right:18px;background:none;border:none;color:#fff;font-size:1.7rem;cursor:pointer;">&times;</button>
         <img id="synopsisBanner" src="" alt="Banner" style="display:none;max-width:100%;border-radius:10px;margin-bottom:1rem;box-shadow:0 2px 12px #0007;">
         <h2 id="synopsisTitle" style="margin-top:0;font-size:1.3rem;color:#ffb300;text-align:center;"></h2>
         <p id="synopsisText" style="font-size:1.05rem;line-height:1.5;margin-bottom:0.7rem;text-align:center;"></p>
         <div id="synopsisCarousel" style="display:none;width:100%;margin:1rem 0;"></div>
         <div id="synopsisTrailerContainer" style="display:none;width:100%;max-width:420px;margin:0 auto 0.5rem auto;"></div>
+        <div id="synopsisPlayerContainer" style="display:none;width:100%;max-width:420px;margin:0 auto 0.5rem auto;"></div>
+        <div style="display:flex;gap:1rem;margin:1.2rem 0 0.2rem 0;justify-content:center;width:100%;">
+          <button id="btnWatchContent" class="btn" style="min-width:110px;" onclick="m3uManager.playM3UContent()">▶️ Assistir</button>
+          <button id="btnShowTrailer" class="btn" style="min-width:110px;" onclick="m3uManager.showTrailer()">🎬 Trailer</button>
+        </div>
       </div>
     </div>
     
     <script>
         class M3UContentManager {
             constructor() {
-                this.currentList = 'lunar';
+                this.currentList = 'fasthd';
                 this.m3uUrls = {
                     lunar: 'http://nplaylunar.shop/get.php?username=triadeiptv2&password=0020082016&type=m3u_plus&output=mpegts',
                     solar: 'http://nplaysolar.shop/get.php?username=triadeiptv3&password=0020082016&type=m3u_plus&output=mpegts',
@@ -795,11 +800,12 @@
                 this.itemsPerPage = 20;
                 this.hasSearched = false;
                 this.isGlobalSearch = false; // Novo: para controlar busca global
-                this.viewMode = 'grid'; // Novo: modo de visualização
+                this.viewMode = 'list'; // Novo: modo de visualização (padrão: lista)
                 this.expandedSeries = {}; // Novo: para controlar a expansão de séries
                 this.filteredChannelsRaw = []; // Novo: para armazenar resultados brutos da busca global
                 this.globalCategoryFilterValue = ''; // Novo: para armazenar a categoria selecionada na busca global
                 this.globalServerFilterValue = ''; // Novo: para armazenar o servidor selecionado na busca global
+                this.selectedGlobalServers = Object.keys(this.m3uUrls); // Por padrão, todos marcados
                 
                 this.init();
             }
@@ -861,6 +867,40 @@
                 const activeTab = document.querySelector(`[data-list="${this.currentList}"]`);
                 if (activeTab) {
                     activeTab.classList.add('active');
+                }
+                
+                // Adicionar/remover checkboxes nas abas se busca global estiver ativa
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    let cb = btn.querySelector('input[type="checkbox"]');
+                    const list = btn.getAttribute('data-list');
+                    if (this.isGlobalSearch) {
+                        if (!cb) {
+                            cb = document.createElement('input');
+                            cb.type = 'checkbox';
+                            cb.style.marginRight = '7px';
+                            cb.style.transform = 'scale(1.2)';
+                            cb.style.verticalAlign = 'middle';
+                            cb.checked = this.selectedGlobalServers.includes(list);
+                            cb.onclick = (e) => {
+                                e.stopPropagation();
+                                this.toggleGlobalServerCheckbox(list, cb.checked);
+                            };
+                            btn.prepend(cb);
+                        } else {
+                            cb.checked = this.selectedGlobalServers.includes(list);
+                            cb.style.display = '';
+                        }
+                    } else {
+                        if (cb) cb.style.display = 'none';
+                    }
+                });
+            }
+            
+            toggleGlobalServerCheckbox(list, checked) {
+                if (checked) {
+                    if (!this.selectedGlobalServers.includes(list)) this.selectedGlobalServers.push(list);
+                } else {
+                    this.selectedGlobalServers = this.selectedGlobalServers.filter(l => l !== list);
                 }
             }
             
@@ -945,8 +985,8 @@
                 const allResults = [];
                 const globalCategories = new Set();
                 const globalServers = new Set();
-                // Buscar em todas as listas em paralelo
-                const fetchPromises = Object.entries(this.m3uUrls).map(async ([listName, url]) => {
+                // Buscar apenas nos servidores selecionados
+                const fetchPromises = Object.entries(this.m3uUrls).filter(([listName]) => this.selectedGlobalServers.includes(listName)).map(async ([listName, url]) => {
                     try {
                         if (!this.channels[listName]) {
                             await this.loadM3UContentForList(listName, url);
@@ -1333,18 +1373,41 @@
                         </div>
                       `;
                       if (expanded) {
-                        contentHTML += `<div style='margin:0.5rem 0 1.2rem 2.5rem;display:flex;flex-wrap:wrap;gap:0.7rem;'>`;
+                        // Agrupar episódios por temporada
+                        const seasons = {};
                         episodes.forEach(ep => {
+                          const season = this.extractSeason(ep.name) || 1;
+                          if (!seasons[season]) seasons[season] = [];
+                          seasons[season].push(ep);
+                        });
+                        const seasonKeys = Object.keys(seasons).sort((a,b)=>a-b);
+                        seasonKeys.forEach(seasonNum => {
+                          const seasonLabel = seasonKeys.length === 1 ? 'Temporada Única' : `Temporada ${seasonNum}`;
+                          const seasonKey = `${serieName}__${seasonNum}`;
+                          // Se só houver uma temporada, expandir por padrão
+                          const seasonExpanded = seasonKeys.length === 1 ? true : !!this.expandedSeasons[seasonKey];
                           contentHTML += `
-                            <div class="content-item" style="width:220px;min-width:180px;cursor:pointer;" onclick="event.stopPropagation();m3uManager.playChannel('${ep.url}', '${ep.name.replace(/'/g, '\'')}')">
-                              <img src="${ep.logo || '/logo-iptv.png'}" alt="${ep.name}" class="content-logo" onerror="this.src='/logo-iptv.png'">
-                              <div class="content-title">${ep.name}</div>
-                              <div class="content-category">${ep.groupTitle} <span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${ep.sourceListName || ''}</span></div>
-                              <div class="content-quality">${ep.quality}</div>
+                            <div style='margin:0.5rem 0 0.5rem 2.5rem;display:flex;align-items:center;gap:0.7rem;cursor:pointer;' onclick="m3uManager.toggleSeasonExpand('${seasonKey}')">
+                              <span style='font-weight:600;color:#ffb300;font-size:1.08em;'>${seasonLabel}</span>
+                              <span style='color:#ffb300;font-size:1.2em;'>${seasonExpanded ? '▼' : '▶'}</span>
+                              <span style='color:#fff;font-size:0.98em;'>(${seasons[seasonNum].length} ep.)</span>
                             </div>
                           `;
+                          if (seasonExpanded) {
+                            contentHTML += `<div style='margin:0.5rem 0 1.2rem 4.5rem;display:flex;flex-wrap:wrap;gap:0.7rem;'>`;
+                            seasons[seasonNum].forEach(ep => {
+                              contentHTML += `
+                                <div class="content-item" style="width:220px;min-width:180px;cursor:pointer;" onclick="event.stopPropagation();m3uManager.playChannel('${ep.url}', '${ep.name.replace(/'/g, '\'')}')">
+                                  <img src="${ep.logo || '/logo-iptv.png'}" alt="${ep.name}" class="content-logo" onerror="this.src='/logo-iptv.png'">
+                                  <div class="content-title">${ep.name}</div>
+                                  <div class="content-category">${ep.groupTitle} ${ep.sourceListName ? `<span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${ep.sourceListName}</span>` : ''}</div>
+                                  <div class="content-quality">${ep.quality}</div>
+                                </div>
+                              `;
+                            });
+                            contentHTML += `</div>`;
+                          }
                         });
-                        contentHTML += `</div>`;
                       }
                     } else if (entry.type === 'item') {
                       const channel = entry.item;
@@ -1355,7 +1418,7 @@
                               <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
                                    onerror="this.src='/logo-iptv.png'">
                               <div class="content-title">${channel.name}</div>
-                              <div class="content-category">${channel.groupTitle} <span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${channel.sourceListName || ''}</span></div>
+                              <div class="content-category">${channel.groupTitle} ${channel.sourceListName ? `<span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${channel.sourceListName}</span>` : ''}</div>
                               <div class="content-quality">${channel.quality}</div>
                           </div>
                       `;
@@ -1386,20 +1449,43 @@
                         </div>
                       `;
                       if (expanded) {
-                        contentHTML += `<div style='margin:0.5rem 0 1.2rem 2.5rem;display:flex;flex-direction:column;gap:0.5rem;'>`;
+                        // Agrupar episódios por temporada
+                        const seasons = {};
                         episodes.forEach(ep => {
+                          const season = this.extractSeason(ep.name) || 1;
+                          if (!seasons[season]) seasons[season] = [];
+                          seasons[season].push(ep);
+                        });
+                        const seasonKeys = Object.keys(seasons).sort((a,b)=>a-b);
+                        seasonKeys.forEach(seasonNum => {
+                          const seasonLabel = seasonKeys.length === 1 ? 'Temporada Única' : `Temporada ${seasonNum}`;
+                          const seasonKey = `${serieName}__${seasonNum}`;
+                          // Se só houver uma temporada, expandir por padrão
+                          const seasonExpanded = seasonKeys.length === 1 ? true : !!this.expandedSeasons[seasonKey];
                           contentHTML += `
-                            <div class="content-list-item" style="background:rgba(255,255,255,0.07);padding:0.7rem 1.2rem;cursor:pointer;" onclick="event.stopPropagation();m3uManager.playChannel('${ep.url}', '${ep.name.replace(/'/g, '\'')}')">
-                              <img src="${ep.logo || '/logo-iptv.png'}" alt="${ep.name}" class="content-list-logo" onerror="this.src='/logo-iptv.png'">
-                              <div class="content-list-info">
-                                <span class="content-list-title">${ep.name}</span>
-                                <span class="content-list-category">${ep.groupTitle} <span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${ep.sourceListName || ''}</span></span>
-                                <span class="content-list-quality">${ep.quality}</span>
-                              </div>
+                            <div style='margin:0.5rem 0 0.5rem 2.5rem;display:flex;align-items:center;gap:0.7rem;cursor:pointer;' onclick="m3uManager.toggleSeasonExpand('${seasonKey}')">
+                              <span style='font-weight:600;color:#ffb300;font-size:1.08em;'>${seasonLabel}</span>
+                              <span style='color:#ffb300;font-size:1.2em;'>${seasonExpanded ? '▼' : '▶'}</span>
+                              <span style='color:#fff;font-size:0.98em;'>(${seasons[seasonNum].length} ep.)</span>
                             </div>
                           `;
+                          if (seasonExpanded) {
+                            contentHTML += `<div style='margin:0.5rem 0 1.2rem 4.5rem;display:flex;flex-direction:column;gap:0.5rem;'>`;
+                            seasons[seasonNum].forEach(ep => {
+                              contentHTML += `
+                                <div class="content-list-item" style="background:rgba(255,255,255,0.07);padding:0.7rem 1.2rem;cursor:pointer;" onclick="event.stopPropagation();m3uManager.playChannel('${ep.url}', '${ep.name.replace(/'/g, '\'')}')">
+                                  <img src="${ep.logo || '/logo-iptv.png'}" alt="${ep.name}" class="content-list-logo" onerror="this.src='/logo-iptv.png'">
+                                  <div class="content-list-info">
+                                    <span class="content-list-title">${ep.name}</span>
+                                    <span class="content-list-category">${ep.groupTitle} ${ep.sourceListName ? `<span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${ep.sourceListName}</span>` : ''}</span>
+                                    <span class="content-list-quality">${ep.quality}</span>
+                                  </div>
+                                </div>
+                              `;
+                            });
+                            contentHTML += `</div>`;
+                          }
                         });
-                        contentHTML += `</div>`;
                       }
                     } else if (entry.type === 'item') {
                       const channel = entry.item;
@@ -1410,7 +1496,7 @@
                           <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-list-logo" onerror="this.src='/logo-iptv.png'">
                           <div class="content-list-info">
                             <span class="content-list-title">${channel.name}</span>
-                            <span class="content-list-category">${channel.groupTitle} <span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${channel.sourceListName || ''}</span></span>
+                            <span class="content-list-category">${channel.groupTitle} ${channel.sourceListName ? `<span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${channel.sourceListName}</span>` : ''}</span>
                             <span class="content-list-quality">${channel.quality}</span>
                             ${sourceInfo}
                           </div>
@@ -1672,6 +1758,14 @@
                 document.getElementById('synopsisModal').style.display = 'flex';
                 document.getElementById('synopsisCarousel').style.display = 'none';
                 document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                document.getElementById('synopsisPlayerContainer').style.display = 'none';
+                document.getElementById('synopsisPlayerContainer').innerHTML = '';
+                document.getElementById('btnWatchContent').disabled = false;
+                document.getElementById('btnWatchContent').classList.remove('btn-secondary');
+                document.getElementById('btnShowTrailer').disabled = true;
+                document.getElementById('btnShowTrailer').classList.add('btn-secondary');
+                this.currentPlayUrl = url;
+                this.currentTrailer = null;
                 document.getElementById('synopsisCarousel').innerHTML = '';
                 document.getElementById('synopsisTrailerContainer').innerHTML = '';
                 const result = await this.fetchSynopsis(name);
@@ -1695,11 +1789,13 @@
                 }
                 // Trailer
                 if (result.trailer) {
-                  const trailerDiv = document.getElementById('synopsisTrailerContainer');
-                  trailerDiv.innerHTML = `<iframe width='100%' height='220' src='https://www.youtube.com/embed/${result.trailer}' frameborder='0' allowfullscreen style='border-radius:8px;box-shadow:0 1px 8px #0007;'></iframe>`;
-                  trailerDiv.style.display = 'block';
+                  this.currentTrailer = result.trailer;
+                  document.getElementById('btnShowTrailer').disabled = false;
+                  document.getElementById('btnShowTrailer').classList.remove('btn-secondary');
                 } else {
-                  document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                  this.currentTrailer = null;
+                  document.getElementById('btnShowTrailer').disabled = true;
+                  document.getElementById('btnShowTrailer').classList.add('btn-secondary');
                 }
               } else {
                 alert('Nome do conteúdo não encontrado.');
@@ -1722,6 +1818,8 @@
                 const globalServerFilter = document.getElementById('globalServerFilter');
 
                 if (this.isGlobalSearch) {
+                    // Marcar apenas FastHD, Premium Iza e SEVEN por padrão
+                    this.selectedGlobalServers = ['fasthd', 'premium', 'seven'];
                     searchInput.placeholder = 'Digite o nome do canal, filme ou série... (Busca Global)';
                     categoryFilter.disabled = true;
                     qualityFilter.disabled = true;
@@ -1733,6 +1831,7 @@
                     globalServerFilter.style.display = 'inline-block';
                     this.updateStats();
                     this.displayContent();
+                    this.updateTabUI();
                 } else {
                     searchInput.placeholder = 'Digite o nome do canal, filme ou série...';
                     categoryFilter.disabled = false;
@@ -1742,6 +1841,7 @@
                     globalCategoryFilter.style.display = 'none';
                     globalServerFilter.style.display = 'none';
                     this.search(); // Re-executar busca individual
+                    this.updateTabUI();
                 }
             }
 
@@ -1750,6 +1850,8 @@
                 // Atualizar botões
                 document.getElementById('viewGridBtn').classList.toggle('btn-secondary', mode !== 'grid');
                 document.getElementById('viewListBtn').classList.toggle('btn-secondary', mode !== 'list');
+                document.getElementById('viewGridBtn').classList.toggle('active', mode === 'grid');
+                document.getElementById('viewListBtn').classList.toggle('active', mode === 'list');
                 this.displayContent();
             }
 
@@ -1787,6 +1889,31 @@
                 this.expandedSeasons[seasonKey] = !this.expandedSeasons[seasonKey];
                 this.displayContent();
             }
+
+            playM3UContent() {
+                if (this.currentPlayUrl) {
+                    document.getElementById('synopsisPlayerContainer').innerHTML = `<video controls autoplay style='width:100%;max-width:420px;border-radius:10px;box-shadow:0 1px 8px #0007;background:#000;'><source src='${this.currentPlayUrl}' type='application/vnd.apple.mpegurl'><source src='${this.currentPlayUrl}' type='video/mp4'>Seu navegador não suporta vídeo ao vivo.</video>`;
+                    document.getElementById('synopsisPlayerContainer').style.display = 'block';
+                    document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                }
+            }
+
+            showTrailer() {
+                if (this.currentTrailer) {
+                    document.getElementById('synopsisTrailerContainer').innerHTML = `<iframe width='100%' height='220' src='https://www.youtube.com/embed/${this.currentTrailer}' frameborder='0' allowfullscreen style='border-radius:8px;box-shadow:0 1px 8px #0007;'></iframe>`;
+                    document.getElementById('synopsisTrailerContainer').style.display = 'block';
+                    document.getElementById('synopsisPlayerContainer').style.display = 'none';
+                }
+            }
+
+            closeSynopsisModal() {
+                document.getElementById('synopsisModal').style.display = 'none';
+                // Limpar player e trailer para encerrar vídeo
+                document.getElementById('synopsisPlayerContainer').innerHTML = '';
+                document.getElementById('synopsisPlayerContainer').style.display = 'none';
+                document.getElementById('synopsisTrailerContainer').innerHTML = '';
+                document.getElementById('synopsisTrailerContainer').style.display = 'none';
+            }
         }
         
         // Inicializar o gerenciador de conteúdo
@@ -1796,6 +1923,14 @@
         window.clearFilters = function() {
             m3uManager.clearFilters();
         };
+
+        // Ao final do construtor, garantir que o botão Lista está ativo
+        setTimeout(() => {
+            document.getElementById('viewListBtn')?.classList.add('active');
+            document.getElementById('viewGridBtn')?.classList.remove('active');
+            document.getElementById('viewGridBtn')?.classList.add('btn-secondary');
+            document.getElementById('viewListBtn')?.classList.remove('btn-secondary');
+        }, 0);
     </script>
 </body>
 </html>
