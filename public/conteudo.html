@@ -792,6 +792,20 @@
                     tita: 'http://cdn.ax66.shop/get.php?username=triadeiptv11&password=0020082016&type=m3u_plus&output=mpegts',
                     fasthd: 'http://000vip.life/get.php?username=vidaiptv&password=200820166&type=m3u_plus&output=mpegts'
                 };
+                // Se estiver em HTTPS, filtrar servidores HTTP
+                if (window.location.protocol === 'https:') {
+                    for (const [key, url] of Object.entries(this.m3uUrls)) {
+                        if (url.startsWith('http://')) {
+                            // Ocultar aba do servidor
+                            setTimeout(() => {
+                                const btn = document.querySelector(`.tab-btn[data-list="${key}"]`);
+                                if (btn) btn.style.display = 'none';
+                            }, 0);
+                            // Remover da lista de servidores disponíveis
+                            delete this.m3uUrls[key];
+                        }
+                    }
+                }
                 this.channels = {};
                 this.filteredChannels = [];
                 this.categories = new Set();
