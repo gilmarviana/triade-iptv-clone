@@ -769,6 +769,7 @@
         <div style="display:flex;gap:1rem;margin:1.2rem 0 0.2rem 0;justify-content:center;width:100%;">
           <button id="btnWatchContent" class="btn" style="min-width:110px;" onclick="m3uManager.playM3UContent()">▶️ Assistir</button>
           <button id="btnShowTrailer" class="btn" style="min-width:110px;" onclick="m3uManager.showTrailer()">🎬 Trailer</button>
+          <button id="btnOpenNewTab" class="btn" style="min-width:110px;" onclick="m3uManager.openInNewTab()">↗️ Nova Aba</button>
         </div>
       </div>
     </div>
@@ -1913,6 +1914,12 @@
                 document.getElementById('synopsisPlayerContainer').style.display = 'none';
                 document.getElementById('synopsisTrailerContainer').innerHTML = '';
                 document.getElementById('synopsisTrailerContainer').style.display = 'none';
+            }
+
+            openInNewTab() {
+                if (this.currentPlayUrl) {
+                    window.open(this.currentPlayUrl.replace(/^@/, ''), '_blank');
+                }
             }
         }
         
