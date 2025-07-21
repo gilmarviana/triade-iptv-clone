@@ -792,20 +792,6 @@
                     tita: 'http://cdn.ax66.shop/get.php?username=triadeiptv11&password=0020082016&type=m3u_plus&output=mpegts',
                     fasthd: 'http://000vip.life/get.php?username=vidaiptv&password=200820166&type=m3u_plus&output=mpegts'
                 };
-                // Se estiver em HTTPS, filtrar servidores HTTP
-                if (window.location.protocol === 'https:') {
-                    for (const [key, url] of Object.entries(this.m3uUrls)) {
-                        if (url.startsWith('http://')) {
-                            // Ocultar aba do servidor
-                            setTimeout(() => {
-                                const btn = document.querySelector(`.tab-btn[data-list="${key}"]`);
-                                if (btn) btn.style.display = 'none';
-                            }, 0);
-                            // Remover da lista de servidores disponíveis
-                            delete this.m3uUrls[key];
-                        }
-                    }
-                }
                 this.channels = {};
                 this.filteredChannels = [];
                 this.categories = new Set();
@@ -1424,24 +1410,24 @@
                       }
                     } else if (entry.type === 'item') {
                       const channel = entry.item;
-                      const sourceInfo = this.isGlobalSearch && channel.sourceListName ? 
-                          `<div class="content-source">📺 ${channel.sourceListName}</div>` : '';
+                    const sourceInfo = this.isGlobalSearch && channel.sourceListName ? 
+                        `<div class="content-source">📺 ${channel.sourceListName}</div>` : '';
                       contentHTML += `
-                          <div class="content-item" onclick="m3uManager.playChannel('${channel.url}', '${channel.name.replace(/'/g, '\'')}')">
-                              <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
-                                   onerror="this.src='/logo-iptv.png'">
-                              <div class="content-title">${channel.name}</div>
+                        <div class="content-item" onclick="m3uManager.playChannel('${channel.url}', '${channel.name.replace(/'/g, '\'')}')">
+                            <img src="${channel.logo || '/logo-iptv.png'}" alt="${channel.name}" class="content-logo" 
+                                 onerror="this.src='/logo-iptv.png'">
+                            <div class="content-title">${channel.name}</div>
                               <div class="content-category">${channel.groupTitle} ${channel.sourceListName ? `<span style='background:rgba(255,179,0,0.18);color:#ffb300;font-weight:600;padding:0.13em 0.7em;border-radius:18px;font-size:0.97em;margin-left:0.5em;border:1px solid rgba(255,179,0,0.25);'>Servidor: ${channel.sourceListName}</span>` : ''}</div>
-                              <div class="content-quality">${channel.quality}</div>
-                          </div>
-                      `;
+                            <div class="content-quality">${channel.quality}</div>
+                        </div>
+                    `;
                     }
                   });
-                  contentDiv.innerHTML = `
+                contentDiv.innerHTML = `
                     <div class="content-grid">
                         ${contentHTML}
                     </div>
-                  `;
+                `;
                 } else {
                   pageDisplayList.forEach(entry => {
                     if (entry.type === 'serie') {
