@@ -1,6 +1,9 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
+  devServer: {
+    port: 5001
+  },
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
       // Otimizações para produção
