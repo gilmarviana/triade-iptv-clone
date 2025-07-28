@@ -655,10 +655,10 @@
                     🧿 SEVEN
                 </button>
                 <button class="tab-btn" data-list="lunar" onclick="m3uManager.switchList('lunar')">
-                    🌙 Lista Padrão Lunar
+                    🌙 Padrão Lunar
                 </button>
                 <button class="tab-btn" data-list="solar" onclick="m3uManager.switchList('solar')">
-                    ☀️ Lista Padrão Solar
+                    ☀️ Padrão Solar
                 </button>
                 <button class="tab-btn" data-list="galaxy" onclick="m3uManager.switchList('galaxy')">
                     🛸 GALAXY
@@ -772,12 +772,13 @@
       </div>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
     <script>
         class M3UContentManager {
             constructor() {
                 this.currentList = 'fasthd';
                 this.m3uUrls = {
-                    lunar: 'https://nplaylunar.shop/get.php?username=triadeiptv2&password=0020082016&type=m3u_plus&output=mpegts',
+                    lunar: 'http://nplaylunar.shop/get.php?username=triadeiptv2&password=0020082016&type=m3u_plus&output=mpegts',
                     solar: 'http://nplaysolar.shop/get.php?username=triadeiptv3&password=0020082016&type=m3u_plus&output=mpegts',
                     premium: 'http://iza002.online/get.php?username=aa9y42&password=7hckhc&type=m3u_plus&output=m3u8',
                     superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=mpegts',
@@ -1891,9 +1892,19 @@
 
             playM3UContent() {
                 if (this.currentPlayUrl) {
-                    document.getElementById('synopsisPlayerContainer').innerHTML = `<video controls autoplay style='width:100%;max-width:420px;border-radius:10px;box-shadow:0 1px 8px #0007;background:#000;'><source src='${this.currentPlayUrl}' type='application/vnd.apple.mpegurl'><source src='${this.currentPlayUrl}' type='video/mp4'>Seu navegador não suporta vídeo ao vivo.</video>`;
+                    // Limpa qualquer player anterior
+                    document.getElementById('synopsisPlayerContainer').innerHTML = '';
                     document.getElementById('synopsisPlayerContainer').style.display = 'block';
                     document.getElementById('synopsisTrailerContainer').style.display = 'none';
+                    // Inicializa Clappr
+                    window.clapprPlayer = new Clappr.Player({
+                        source: this.currentPlayUrl.replace(/^@/, ''),
+                        parentId: '#synopsisPlayerContainer',
+                        width: '100%',
+                        height: 340,
+                        autoPlay: true,
+                        poster: '',
+                    });
                 }
             }
 
@@ -1908,6 +1919,10 @@
             closeSynopsisModal() {
                 document.getElementById('synopsisModal').style.display = 'none';
                 // Limpar player e trailer para encerrar vídeo
+                if (window.clapprPlayer) {
+                    window.clapprPlayer.destroy();
+                    window.clapprPlayer = null;
+                }
                 document.getElementById('synopsisPlayerContainer').innerHTML = '';
                 document.getElementById('synopsisPlayerContainer').style.display = 'none';
                 document.getElementById('synopsisTrailerContainer').innerHTML = '';
