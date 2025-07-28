@@ -61,6 +61,14 @@
   color: #555;
   font-weight: normal;
 }
+.plano__preco-secundario {
+  display: block;
+  font-size: 0.9rem;
+  color: #ffb300;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  letter-spacing: 0.5px;
+}
 .plano__btn {
   margin-top: 1.7rem;
   background: linear-gradient(90deg, #ffb300 60%, #ff9800 100%);
