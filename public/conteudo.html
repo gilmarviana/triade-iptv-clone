@@ -567,19 +567,8 @@
         
         <!-- Abas de Listas -->
         <div class="tabs-section">
-            <div class="tabs-container">
-                <button class="tab-btn active" data-list="lunar" onclick="m3uManager.switchList('lunar')">
-                    🌙 Lista Padrão Lunar
-                </button>
-                <button class="tab-btn" data-list="solar" onclick="m3uManager.switchList('solar')">
-                    ☀️ Lista Padrão Solar
-                </button>
-                <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
-                    ⭐ Lista Premium
-                </button>
-                <button class="tab-btn" data-list="superpremium" onclick="m3uManager.switchList('superpremium')">
-                    💎 Super Premium
-                </button>
+            <div class="tabs-container tab-list">
+                <!-- Abas dos servidores serão geradas dinamicamente pelo JS -->
             </div>
         </div>
         
@@ -649,30 +638,155 @@
       </div>
     </div>
     
+    <!-- Database API -->
+    <script src="/js/database-api.js"></script>
+    
     <script>
         class M3UContentManager {
             constructor() {
-                this.currentList = 'lunar';
-                this.m3uUrls = {
-                    lunar: 'http://nplaylunar.shop/get.php?username=98809226&password=12506682&type=m3u_plus&output=mpegts',
-                    solar: 'http://nplaysolar.shop/get.php?username=43136813&password=28414831&type=m3u_plus&output=mpegts',
-                    premium: 'http://iza002.online/get.php?username=aa9y42&password=7hckhc&type=m3u_plus&output=m3u8',
-                    superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=mpegts'
-                };
+                this.currentList = null;
+                this.m3uUrls = {}; // Será carregado dinamicamente
+                this.serversList = []; // Lista de servidores do banco
                 this.channels = {};
                 this.filteredChannels = [];
                 this.categories = new Set();
                 this.currentPage = 1;
                 this.itemsPerPage = 20;
                 this.hasSearched = false;
-                this.isGlobalSearch = false; // Novo: para controlar busca global
+                this.isGlobalSearch = false;
                 
                 this.init();
             }
             
-            init() {
-                this.setupEventListeners();
-                this.updateTabUI();
+            async init() {
+                try {
+                    await this.loadServersFromDatabase();
+                    this.setupEventListeners();
+                    if (this.serversList.length > 0) {
+                        this.currentList = this.serversList[0].key;
+                        await this.switchList(this.currentList);
+                    } else {
+                        this.showEmptyState();
+                    }
+                } catch (error) {
+                    console.error('Erro ao inicializar:', error);
+                    this.showError('Erro ao carregar servidores');
+                }
+            }
+            
+            async loadServersFromDatabase() {
+                try {
+                    console.log('🔄 Iniciando carregamento de servidores...');
+                    const response = await fetch('/api/servers');
+                    console.log('📡 Response status:', response.status);
+                    console.log('📡 Response headers:', [...response.headers.entries()]);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                    }
+                    
+                    const servers = await response.json();
+                    console.log('📦 Servidores recebidos:', servers);
+                    
+                    // Filtrar apenas servidores ativos e ordenar por ordem
+                    this.serversList = servers
+                        .filter(server => server.isActive && server.status !== 'offline')
+                        .sort((a, b) => a.order - b.order);
+                    
+                    console.log('✅ Servidores filtrados:', this.serversList);
+                    
+                    // Criar o objeto m3uUrls dinamicamente
+                    this.m3uUrls = {};
+                    this.serversList.forEach(server => {
+                        this.m3uUrls[server.key] = server.url;
+                    });
+                    
+                    console.log('🔗 URLs M3U criadas:', this.m3uUrls);
+                    
+                    // Atualizar as abas
+                    this.updateServerTabs();
+                    
+                    console.log('✅ Servidores carregados:', this.serversList.length);
+                    
+                } catch (error) {
+                    console.error('❌ Erro detalhado ao carregar servidores:', error);
+                    throw error;
+                }
+            }
+            
+            updateServerTabs() {
+                const tabsContainer = document.querySelector('.tabs-container.tab-list');
+                if (!tabsContainer || this.serversList.length === 0) {
+                    console.log('❌ Container de abas não encontrado ou sem servidores');
+                    return;
+                }
+                
+                // Limpar abas existentes
+                tabsContainer.innerHTML = '';
+                
+                // Criar abas dinamicamente baseadas nos servidores
+                this.serversList.forEach((server, index) => {
+                    const button = document.createElement('button');
+                    button.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+                    button.dataset.list = server.key;
+                    button.onclick = () => this.switchList(server.key);
+                    
+                    // Usar nome do servidor ou fallback para key
+                    const displayName = server.name.replace(/[🌙☀️💎⭐]/g, '').trim() || server.key;
+                    button.innerHTML = `
+                        <span class="tab-icon">${this.getServerIcon(server.key)}</span>
+                        <span class="tab-text">${displayName}</span>
+                    `;
+                    
+                    tabsContainer.appendChild(button);
+                });
+            }
+            
+            getServerIcon(serverKey) {
+                const icons = {
+                    lunar: '🌙',
+                    solar: '☀️',
+                    premium: '💎',
+                    superpremium: '⭐',
+                    default: '📡'
+                };
+                return icons[serverKey] || icons.default;
+            }
+            
+            showEmptyState() {
+                const contentContainer = document.getElementById('content');
+                if (!contentContainer) {
+                    console.error('❌ Container de conteúdo não encontrado');
+                    return;
+                }
+                contentContainer.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #bdc3c7;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">📡</div>
+                        <h3>Nenhum servidor configurado</h3>
+                        <p>Configure servidores no painel administrativo para ver o conteúdo.</p>
+                        <a href="/painel.html" style="color: #ffb300; text-decoration: none; font-weight: bold;">
+                            🎛️ Ir para o Painel Administrativo
+                        </a>
+                    </div>
+                `;
+            }
+            
+            showError(message) {
+                const contentContainer = document.getElementById('content');
+                if (!contentContainer) {
+                    console.error('❌ Container de conteúdo não encontrado');
+                    return;
+                }
+                contentContainer.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #e74c3c;">
+                        <div style="font-size: 4rem; margin-bottom: 20px;">❌</div>
+                        <h3>Erro</h3>
+                        <p>${message}</p>
+                        <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #ffb300; color: #181c2f; border: none; border-radius: 25px; cursor: pointer; font-weight: 600;">
+                            🔄 Tentar Novamente
+                        </button>
+                    </div>
+                `;
             }
             
             setupEventListeners() {
@@ -718,7 +832,10 @@
             }
             
             updateTabUI() {
-                // Remover classe active de todas as abas
+                // Primeiro, atualizar as abas com os servidores do banco
+                this.updateServerTabs();
+                
+                // Depois, marcar a aba ativa
                 document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
