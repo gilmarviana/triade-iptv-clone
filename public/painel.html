@@ -563,6 +563,9 @@
                     <button class="btn btn-warning" onclick="reorderServers()">
                         🔄 Reorganizar
                     </button>
+                    <button class="btn" style="background: #17a2b8; color: white;" onclick="exportServers()">
+                        📥 Exportar Lista
+                    </button>
                     <a href="/" class="btn" style="background: #6c757d; color: white;">
                         🏠 Voltar ao Site
                     </a>
@@ -954,6 +957,43 @@
             } catch (error) {
                 console.error('Erro ao testar servidores:', error);
                 showError('Erro ao testar servidores');
+            }
+        }
+        
+        // Exportar lista de servidores
+        async function exportServers() {
+            try {
+                showInfo('Preparando exportação...');
+                
+                const response = await fetch('/api/export', {
+                    method: 'GET'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao exportar servidores');
+                }
+                
+                const data = await response.json();
+                
+                // Criar arquivo JSON para download
+                const jsonData = JSON.stringify(data, null, 2);
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Criar link de download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `servidores-iptv-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showSuccess(`Lista exportada! ${data.servers.length} servidores salvos.`);
+                
+            } catch (error) {
+                console.error('Erro ao exportar servidores:', error);
+                showError('Erro ao exportar lista de servidores');
             }
         }
         
