@@ -642,17 +642,38 @@
         <!-- Abas de Listas -->
         <div class="tabs-section">
             <div class="tabs-container">
-                <button class="tab-btn" data-list="fasthd" onclick="m3uManager.switchList('fasthd')">
-                    ⚡ FastHD
-                </button>
                 <button class="tab-btn" data-list="superpremium" onclick="m3uManager.switchList('superpremium')">
                     💎 Alpha Server
+                </button>
+                <button class="tab-btn" data-list="fasthd" onclick="m3uManager.switchList('fasthd')">
+                    ⚡ FastHD
                 </button>
                 <button class="tab-btn" data-list="premium" onclick="m3uManager.switchList('premium')">
                     ⭐ Premium Iza
                 </button>
+                <button class="tab-btn" data-list="oncash" onclick="m3uManager.switchList('oncash')">
+                    📡 On Cash
+                </button>
+                <button class="tab-btn" data-list="pixmaster" onclick="m3uManager.switchList('pixmaster')">
+                    📡 Pix Master
+                </button>
+                <button class="tab-btn" data-list="goldpix" onclick="m3uManager.switchList('goldpix')">
+                    📡 Gold Pix
+                </button>
+                <button class="tab-btn" data-list="pixcod" onclick="m3uManager.switchList('pixcod')">
+                    📡 Pix Cod
+                </button>
+                <button class="tab-btn" data-list="pixflow" onclick="m3uManager.switchList('pixflow')">
+                    📡 Pix Flow
+                </button>
+                <button class="tab-btn" data-list="pixvault" onclick="m3uManager.switchList('pixvault')">
+                    📡 Pix Vault
+                </button>
+                <button class="tab-btn" data-list="onepix" onclick="m3uManager.switchList('onepix')">
+                    📡 One Pix
+                </button>
                 <button class="tab-btn" data-list="seven" onclick="m3uManager.switchList('seven')">
-                    🧿 SEVEN
+                    🧿 Seven
                 </button>
                 <button class="tab-btn" data-list="lunar" onclick="m3uManager.switchList('lunar')">
                     🌙 Padrão Lunar
@@ -778,20 +799,27 @@
             constructor() {
                 this.currentList = 'fasthd';
                 this.m3uUrls = {
-                    lunar: 'http://nplaylunar.shop/get.php?username=triadeiptv2&password=0020082016&type=m3u_plus&output=mpegts',
-                    solar: 'http://nplaysolar.shop/get.php?username=triadeiptv3&password=0020082016&type=m3u_plus&output=mpegts',
+                    oncash: 'http://facilita.fun/get.php?username=triadeiptv01&password=020082016&type=m3u_plus&output=m3u8',
+                    pixmaster: 'http://fripnt.xyz/get.php?username=triadeiptv02&password=020082016&type=m3u_plus&output=m3u8',
+                    goldpix: 'http://attech.site:80/get.php?username=triadeiptv03&password=020082016&type=m3u_plus&output=m3u8',
+                    pixcod: 'http://onx.pxlst.site/get.php?username=triadeiptv04&password=020082016&type=m3u_plus&output=m3u8',
+                    pixflow: 'http://on.pxlst.site/get.php?username=triadeiptv05&password=020082016&type=m3u_plus&output=m3u8',
+                    pixvault: 'http://guix.cloud/get.php?username=triadeiptv06&password=020082016&type=m3u_plus&output=m3u8',
+                    onepix: 'http://megaplay.uno/get.php?username=triadeiptv07&password=020082016&type=m3u_plus&output=m3u8',
+                    lunar: 'http://nplaylunar.shop/get.php?username=triadeiptv2&password=0020082016&type=m3u_plus&output=m3u8',
+                    solar: 'http://nplaysolar.shop/get.php?username=triadeiptv3&password=0020082016&type=m3u_plus&output=m3u8',
                     premium: 'http://iza002.online/get.php?username=aa9y42&password=7hckhc&type=m3u_plus&output=m3u8',
-                    superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=mpegts',
-                    seven: 'http://cdn.v766.site:80/get.php?username=triadeiptv1&password=0020082016&type=m3u_plus&output=mpegts',
-                    galaxy: 'http://cdn.netplaygalaxy.shop:80/get.php?username=triadeiptv4&password=0020082016&type=m3u_plus&output=mpegts',
-                    sky: 'http://facilita.fun:80/get.php?username=triadeiptv5&password=0020082016&type=m3u_plus&output=mpegts',
-                    atena: 'http://dns.whsv.top:80/get.php?username=triadeiptv6&password=0020082016&type=m3u_plus&output=mpegts',
-                    god: 'http://blessed.blls.site:80/get.php?username=triadeiptv7&password=0020082016&type=m3u_plus&output=mpegts',
-                    venus: 'http://megaplay.uno/get.php?username=triadeiptv8&password=0020082016&type=m3u_plus&output=mpegts',
-                    urano: 'http://cdn.ofmp.site/get.php?username=triadeiptv9&password=0020082016&type=m3u_plus&output=mpegts',
-                    andromeda: 'http://gerenciador5.xyz/get.php?username=triadeiptv10&password=0020082016&type=m3u_plus&output=mpegts',
-                    tita: 'http://cdn.ax66.shop/get.php?username=triadeiptv11&password=0020082016&type=m3u_plus&output=mpegts',
-                    fasthd: 'http://000vip.life/get.php?username=vidaiptv&password=200820166&type=m3u_plus&output=mpegts'
+                    superpremium: 'http://voando66483.click/get.php?username=364486666&password=568728463&type=m3u_plus&output=m3u8',
+                    seven: 'http://cdn.v766.site:80/get.php?username=triadeiptv1&password=0020082016&type=m3u_plus&output=m3u8',
+                    galaxy: 'http://cdn.netplaygalaxy.shop:80/get.php?username=triadeiptv4&password=0020082016&type=m3u_plus&output=m3u8',
+                    sky: 'http://facilita.fun:80/get.php?username=triadeiptv5&password=0020082016&type=m3u_plus&output=m3u8',
+                    atena: 'http://dns.whsv.top:80/get.php?username=triadeiptv6&password=0020082016&type=m3u_plus&output=m3u8',
+                    god: 'http://blessed.blls.site:80/get.php?username=triadeiptv7&password=0020082016&type=m3u_plus&output=m3u8',
+                    venus: 'http://megaplay.uno/get.php?username=triadeiptv8&password=0020082016&type=m3u_plus&output=m3u8',
+                    urano: 'http://cdn.ofmp.site/get.php?username=triadeiptv9&password=0020082016&type=m3u_plus&output=m3u8',
+                    andromeda: 'http://gerenciador5.xyz/get.php?username=triadeiptv10&password=0020082016&type=m3u_plus&output=m3u8',
+                    tita: 'http://cdn.ax66.shop/get.php?username=triadeiptv11&password=0020082016&type=m3u_plus&output=m3u8',
+                    fasthd: 'http://000vip.life/get.php?username=vidaiptv&password=200820166&type=m3u_plus&output=m3u8'
                 };
                 this.channels = {};
                 this.filteredChannels = [];
@@ -920,6 +948,13 @@
                     fasthd: '⚡ FastHD',
                     superpremium: 'Alpha Server',
                     premium: 'Premium Iza',
+                    oncash: '📡 On Cash',
+                    pixmaster: '📡 Pix Master',
+                    goldpix: '📡 Gold Pix',
+                    pixcod: '📡 Pix Cod',
+                    pixflow: '📡 Pix Flow',
+                    pixvault: '📡 Pix Vault',
+                    onepix: '📡 One Pix',
                     seven: '🧿 SEVEN',
                     lunar: 'Padrão Lunar',
                     solar: 'Padrão Solar',
