@@ -10,6 +10,13 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Log de todas as requisições
+app.use((req, res, next) => {
+  console.log(`📥 ${req.method} ${req.url} - ${new Date().toISOString()}`);
+  next();
+});
+
 app.use(express.static('public'));
 app.use(express.static('build'));
 
@@ -63,21 +70,24 @@ app.get('/api/servers', async (req, res) => {
   try {
     console.log('📡 Requisição recebida para /api/servers');
     const servers = await prisma.server.findMany({
-      where: { isActive: true },
       orderBy: [
         { order: 'asc' },
         { createdAt: 'asc' }
       ]
     });
     console.log('📊 Servidores encontrados:', servers.length);
-    console.log('📋 Dados dos servidores:', servers.map(s => ({ id: s.id, key: s.key, name: s.name, order: s.order })));
+    console.log('📋 Dados completos dos primeiros 2 servidores:', JSON.stringify(servers.slice(0, 2), null, 2));
+    
+    // Filtrar apenas servidores ativos no JavaScript
+    const activeServers = servers.filter(server => server.isActive !== false && server.status !== 'offline');
+    console.log('✅ Servidores ativos filtrados:', activeServers.length);
     
     // Adicionar headers de CORS explicitamente
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
-    res.json(servers);
+    res.json(activeServers);
   } catch (error) {
     console.error('❌ Erro ao buscar servidores:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
@@ -1119,15 +1129,25 @@ async function startServer() {
     
     // Iniciar servidor
     console.log('🔄 Iniciando servidor Express...');
-    const server = app.listen(PORT, () => {
+    console.log(`🔍 Tentando fazer bind na porta ${PORT}...`);
+    
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Servidor rodando na porta ${PORT}`);
       console.log(`📱 Painel administrativo: http://localhost:${PORT}/painel.html`);
       console.log(`🎬 Página de conteúdo: http://localhost:${PORT}/conteudo.html`);
       console.log(`📊 API Base: http://localhost:${PORT}/api`);
+      console.log(`🔍 Endereço de bind: ${server.address().address}:${server.address().port}`);
     });
     
     server.on('error', (error) => {
       console.error('❌ Erro no servidor Express:', error);
+      if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Porta ${PORT} já está em uso!`);
+      }
+    });
+    
+    server.on('listening', () => {
+      console.log(`✅ Servidor fazendo bind com sucesso na porta ${PORT}`);
     });
     
   } catch (error) {
