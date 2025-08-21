@@ -1,0 +1,265 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Modelo para servidores IPTV
+model Server {
+  id          String   @id @default(cuid())
+  key         String   @unique // Identificador único do servidor (lunar, solar, etc.)
+  name        String   // Nome de exibição (🌙 Padrão Lunar)
+  url         String   // URL do M3U
+  order       Int      @default(0) // Ordem de exibição dos servidores
+  isActive    Boolean  @default(true) // Se o servidor está ativo
+  status      String   @default("unknown") // online, offline, testing, unknown
+  lastTested  DateTime? // Última vez que foi testado
+  responseTime Int?    // Tempo de resposta em ms
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  channels    Channel[]
+  movies      Movie[]
+  series      Series[]
+
+  @@map("servers")
+}
+
+// Modelo para usuários/sessões
+model User {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique // ID da sessão do usuário
+  deviceInfo  String?  // Informações do dispositivo
+  ipAddress   String?  // IP do usuário
+  userAgent   String?  // User agent do navegador
+  preferences String?  // Preferências em JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastSeen    DateTime @default(now())
+
+  // Relacionamentos
+  favorites   Favorite[]
+  watchHistory WatchHistory[]
+  searches    SearchHistory[]
+
+  @@map("users")
+}
+
+// Modelo para canais de TV
+model Channel {
+  id          String   @id @default(cuid())
+  serverId    String
+  name        String
+  category    String
+  logo        String?
+  url         String
+  quality     String   @default("HD") // SD, HD, FHD, 4K
+  language    String   @default("pt") // pt, en, es, etc.
+  isAdult     Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  epgId       String?  // ID para guia de programação
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  server      Server   @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  favorites   Favorite[]
+  watchHistory WatchHistory[]
+
+  @@map("channels")
+}
+
+// Modelo para filmes
+model Movie {
+  id          String   @id @default(cuid())
+  serverId    String
+  title       String
+  originalTitle String?
+  year        Int?
+  genre       String?
+  director    String?
+  cast        String?  // JSON array de atores
+  plot        String?
+  poster      String?
+  imdbId      String?
+  tmdbId      String?
+  rating      Float?
+  duration    Int?     // Duração em minutos
+  quality     String   @default("HD") // SD, HD, FHD, 4K
+  language    String   @default("pt")
+  url         String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  server      Server   @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  favorites   Favorite[]
+  watchHistory WatchHistory[]
+
+  @@map("movies")
+}
+
+// Modelo para séries
+model Series {
+  id          String   @id @default(cuid())
+  serverId    String
+  title       String
+  originalTitle String?
+  year        Int?
+  genre       String?
+  plot        String?
+  poster      String?
+  imdbId      String?
+  tmdbId      String?
+  rating      Float?
+  language    String   @default("pt")
+  totalSeasons Int?
+  status      String?  // ongoing, completed, cancelled
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  server      Server   @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  episodes    Episode[]
+  favorites   Favorite[]
+  watchHistory WatchHistory[]
+
+  @@map("series")
+}
+
+// Modelo para episódios de séries
+model Episode {
+  id          String   @id @default(cuid())
+  seriesId    String
+  seasonNumber Int
+  episodeNumber Int
+  title       String?
+  plot        String?
+  airDate     DateTime?
+  duration    Int?     // Duração em minutos
+  quality     String   @default("HD")
+  url         String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamentos
+  series      Series   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  watchHistory WatchHistory[]
+
+  @@map("episodes")
+}
+
+// Modelo para favoritos do usuário
+model Favorite {
+  id          String   @id @default(cuid())
+  userId      String
+  contentType String   // channel, movie, series
+  channelId   String?
+  movieId     String?
+  seriesId    String?
+  createdAt   DateTime @default(now())
+
+  // Relacionamentos
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel     Channel? @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  movie       Movie?   @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  series      Series?  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, contentType, channelId, movieId, seriesId])
+  @@map("favorites")
+}
+
+// Modelo para histórico de visualização
+model WatchHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  contentType String   // channel, movie, series, episode
+  channelId   String?
+  movieId     String?
+  seriesId    String?
+  episodeId   String?
+  duration    Int?     // Tempo assistido em segundos
+  totalDuration Int?   // Duração total do conteúdo
+  progress    Float?   // Progresso de 0 a 1
+  lastPosition Int?    // Última posição em segundos
+  isCompleted Boolean  @default(false)
+  watchedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  // Relacionamentos
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel     Channel? @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  movie       Movie?   @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  series      Series?  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  episode     Episode? @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@map("watch_history")
+}
+
+// Modelo para histórico de pesquisas
+model SearchHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  query       String
+  resultCount Int      @default(0)
+  searchedAt  DateTime @default(now())
+
+  // Relacionamentos
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("search_history")
+}
+
+// Modelo para configurações gerais
+model Config {
+  id    String @id @default(cuid())
+  key   String @unique // Chave da configuração
+  value String // Valor em JSON
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("configs")
+}
+
+// Modelo para estatísticas do sistema
+model SystemStats {
+  id              String   @id @default(cuid())
+  totalUsers      Int      @default(0)
+  totalChannels   Int      @default(0)
+  totalMovies     Int      @default(0)
+  totalSeries     Int      @default(0)
+  totalEpisodes   Int      @default(0)
+  activeUsers24h  Int      @default(0)
+  activeUsers7d   Int      @default(0)
+  topSearches     String?  // JSON array das pesquisas mais populares
+  topContent      String?  // JSON array do conteúdo mais assistido
+  date            DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@map("system_stats")
+}
+
+// Modelo para logs do sistema
+model SystemLog {
+  id          String   @id @default(cuid())
+  level       String   // info, warning, error, debug
+  message     String
+  data        String?  // Dados adicionais em JSON
+  userId      String?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@map("system_logs")
+}
