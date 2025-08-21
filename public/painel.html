@@ -903,12 +903,20 @@
                     method: 'POST'
                 });
                 
+                if (!response.ok) {
+                    throw new Error('Erro na requisição de teste');
+                }
+                
                 const result = await response.json();
                 
-                if (result.success) {
-                    showSuccess(`Servidor testado! Status: ${result.status}`);
+                if (result.testResult) {
+                    if (result.testResult.success) {
+                        showSuccess(`Servidor testado! Status: ${result.status} (${result.testResult.responseTime}ms)`);
+                    } else {
+                        showError(`Teste falhou: ${result.testResult.error || 'Servidor offline'}`);
+                    }
                 } else {
-                    showError(`Teste falhou: ${result.error}`);
+                    showSuccess(`Servidor testado! Status: ${result.status}`);
                 }
                 
                 await loadServers();
@@ -933,8 +941,12 @@
                     method: 'POST'
                 });
                 
+                if (!response.ok) {
+                    throw new Error('Erro na requisição de teste');
+                }
+                
                 const result = await response.json();
-                showSuccess(`Teste concluído! ${result.tested} servidores testados.`);
+                showSuccess(`Teste concluído! ${result.results ? result.results.length : result.tested || 0} servidores testados.`);
                 
                 await loadServers();
                 await loadStats();
@@ -946,10 +958,11 @@
         }
         
         // Reorganizar servidores
+        // Reorganizar servidores
         async function reorderServers() {
             try {
                 const response = await fetch('/api/servers/reorder', {
-                    method: 'POST'
+                    method: 'PUT'
                 });
                 
                 const result = await response.json();
