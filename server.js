@@ -70,24 +70,20 @@ app.get('/api/servers', async (req, res) => {
   try {
     console.log('📡 Requisição recebida para /api/servers');
     const servers = await prisma.server.findMany({
+      where: { isActive: true },
       orderBy: [
         { order: 'asc' },
         { createdAt: 'asc' }
       ]
     });
     console.log('📊 Servidores encontrados:', servers.length);
-    console.log('📋 Dados completos dos primeiros 2 servidores:', JSON.stringify(servers.slice(0, 2), null, 2));
-    
-    // Filtrar apenas servidores ativos no JavaScript
-    const activeServers = servers.filter(server => server.isActive !== false && server.status !== 'offline');
-    console.log('✅ Servidores ativos filtrados:', activeServers.length);
     
     // Adicionar headers de CORS explicitamente
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
-    res.json(activeServers);
+    res.json(servers);
   } catch (error) {
     console.error('❌ Erro ao buscar servidores:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });

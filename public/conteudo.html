@@ -660,16 +660,21 @@
             
             async init() {
                 try {
+                    console.log('🔄 Iniciando M3UContentManager...');
                     await this.loadServersFromDatabase();
+                    console.log('✅ Servidores carregados, configurando listeners...');
                     this.setupEventListeners();
+                    
                     if (this.serversList.length > 0) {
+                        console.log('📋 Definindo lista atual:', this.serversList[0].key);
                         this.currentList = this.serversList[0].key;
                         await this.switchList(this.currentList);
                     } else {
+                        console.log('⚠️ Nenhum servidor encontrado');
                         this.showEmptyState();
                     }
                 } catch (error) {
-                    console.error('Erro ao inicializar:', error);
+                    console.error('❌ Erro ao inicializar M3UContentManager:', error);
                     this.showError('Erro ao carregar servidores');
                 }
             }
@@ -688,12 +693,10 @@
                     const servers = await response.json();
                     console.log('📦 Servidores recebidos:', servers);
                     
-                    // Filtrar apenas servidores ativos e ordenar por ordem
-                    this.serversList = servers
-                        .filter(server => server.isActive && server.status !== 'offline')
-                        .sort((a, b) => a.order - b.order);
+                    // Os servidores já vêm filtrados e ativos do backend
+                    this.serversList = servers.sort((a, b) => a.order - b.order);
                     
-                    console.log('✅ Servidores filtrados:', this.serversList);
+                    console.log('✅ Servidores ordenados:', this.serversList);
                     
                     // Criar o objeto m3uUrls dinamicamente
                     this.m3uUrls = {};
@@ -715,7 +718,11 @@
             }
             
             updateServerTabs() {
+                console.log('🔄 Atualizando abas dos servidores...');
                 const tabsContainer = document.querySelector('.tabs-container.tab-list');
+                console.log('📋 Container encontrado:', !!tabsContainer);
+                console.log('📋 Quantidade de servidores:', this.serversList.length);
+                
                 if (!tabsContainer || this.serversList.length === 0) {
                     console.log('❌ Container de abas não encontrado ou sem servidores');
                     return;
@@ -723,16 +730,18 @@
                 
                 // Limpar abas existentes
                 tabsContainer.innerHTML = '';
+                console.log('🧹 Container limpo');
                 
                 // Criar abas dinamicamente baseadas nos servidores
                 this.serversList.forEach((server, index) => {
+                    console.log(`📋 Criando aba ${index + 1}: ${server.name} (${server.key})`);
                     const button = document.createElement('button');
                     button.className = `tab-btn ${index === 0 ? 'active' : ''}`;
                     button.dataset.list = server.key;
                     button.onclick = () => this.switchList(server.key);
                     
                     // Usar nome do servidor ou fallback para key
-                    const displayName = server.name.replace(/[🌙☀️💎⭐]/g, '').trim() || server.key;
+                    const displayName = server.name.replace(/[🌙☀️💎⭐🌑🛸🏛️🌬️📡🪐☄️👺⚡💣]/g, '').trim() || server.key;
                     button.innerHTML = `
                         <span class="tab-icon">${this.getServerIcon(server.key)}</span>
                         <span class="tab-text">${displayName}</span>
@@ -740,6 +749,8 @@
                     
                     tabsContainer.appendChild(button);
                 });
+                
+                console.log('✅ Abas criadas com sucesso:', this.serversList.length);
             }
             
             getServerIcon(serverKey) {
