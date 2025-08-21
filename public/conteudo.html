@@ -658,6 +658,22 @@
                 this.init();
             }
             
+            // Detectar automaticamente a URL da API baseada no ambiente
+            getApiUrl() {
+                // Se estivermos no React dev server (porta 3000), usar proxy
+                if (window.location.port === '3000') {
+                    return '';  // Usar proxy do React
+                }
+                // Se estivermos no Express server (porta 3001) ou produção
+                else if (window.location.port === '3001' || window.location.port === '') {
+                    return '';  // Usar URL relativa
+                }
+                // Fallback para localhost:3001
+                else {
+                    return 'http://localhost:3001';
+                }
+            }
+            
             async init() {
                 try {
                     console.log('🔄 Iniciando M3UContentManager...');
@@ -682,7 +698,12 @@
             async loadServersFromDatabase() {
                 try {
                     console.log('🔄 Iniciando carregamento de servidores...');
-                    const response = await fetch('/api/servers');
+                    
+                    // Detectar automaticamente a URL da API
+                    const apiUrl = this.getApiUrl();
+                    console.log('🌐 URL da API detectada:', apiUrl);
+                    
+                    const response = await fetch(`${apiUrl}/api/servers`);
                     console.log('📡 Response status:', response.status);
                     console.log('📡 Response headers:', [...response.headers.entries()]);
                     
