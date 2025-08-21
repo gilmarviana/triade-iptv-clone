@@ -5,7 +5,6 @@ const planos = [
   {
     nome: 'Mensal',
     preco: 'R$ 10,00',
-    precoSecundario: '1ª mês',
     descricao: [
       '1 Tela',
       '+30.000 Conteúdo',
@@ -16,7 +15,7 @@ const planos = [
       'Rádios e Clipes Online',
       'Cortesias: Pacote Filmes e Séries',
     ],
-    selo: 'Promoção',
+    selo: null,
   },
   {
     nome: 'Semestral',
@@ -60,10 +59,7 @@ const Planos = () => (
         <div className={`plano__card${plano.selo ? ' selo' : ''}`} key={plano.nome}>
           {plano.selo && <div className="plano__selo">{plano.selo}</div>}
           <h3>{plano.nome}</h3>
-          <div className="plano__preco">
-            {plano.preco} 
-            {plano.precoSecundario && <span className="plano__preco-secundario">{plano.precoSecundario}</span>}
-          </div>
+          <div className="plano__preco">{plano.preco} <span></span></div>
           <ul>
             {plano.descricao.map((item, idx) => (
               <li key={idx}>{item}</li>
