@@ -27,7 +27,16 @@
     "build:analyze": "ANALYZE=true craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build -l 5001"
+    "serve": "serve -s build -l 5001",
+    "server": "node server.js",
+    "db:studio": "npx prisma studio",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
+    "db:push": "npx prisma db push",
+    "db:reset": "npx prisma migrate reset",
+    "db:seed": "npx prisma db seed",
+    "db:status": "npx prisma migrate status",
+    "db:backup": "copy prisma\\dev.db backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%.db"
   },
   "homepage": ".",
   "eslintConfig": {
