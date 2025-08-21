@@ -179,6 +179,75 @@ app.put('/api/servers/:id', async (req, res) => {
   }
 });
 
+// Importar configuração de servidores
+app.post('/api/import', async (req, res) => {
+  try {
+    const { servers } = req.body;
+
+    if (!Array.isArray(servers)) {
+      return res.status(400).json({ error: 'Dados inválidos' });
+    }
+
+    const results = {
+      imported: 0,
+      updated: 0,
+      errors: []
+    };
+
+    for (const serverData of servers) {
+      try {
+        const { key, name, url, status, order } = serverData;
+
+        // Validações básicas
+        if (!key || !name || !url) {
+          results.errors.push(`Servidor ${name || 'sem nome'}: campos obrigatórios faltando`);
+          continue;
+        }
+
+        // Verificar se já existe
+        const existing = await prisma.server.findUnique({
+          where: { key }
+        });
+
+        if (existing) {
+          // Atualizar servidor existente
+          await prisma.server.update({
+            where: { key },
+            data: {
+              name,
+              url,
+              status: status || 'unknown',
+              order: order || 0,
+              updatedAt: new Date()
+            }
+          });
+          results.updated++;
+        } else {
+          // Criar novo servidor
+          await prisma.server.create({
+            data: {
+              key,
+              name,
+              url,
+              status: status || 'unknown',
+              order: order || 0
+            }
+          });
+          results.imported++;
+        }
+
+      } catch (error) {
+        results.errors.push(`Servidor ${serverData.name || 'sem nome'}: ${error.message}`);
+      }
+    }
+
+    res.json(results);
+  } catch (error) {
+    console.error('Erro ao importar servidores:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Atualizar ordem dos servidores
 app.put('/api/servers/reorder', async (req, res) => {
   try {
