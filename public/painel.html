@@ -566,6 +566,9 @@
                     <button class="btn" style="background: #17a2b8; color: white;" onclick="exportServers()">
                         📥 Exportar Lista
                     </button>
+                    <button class="btn" style="background: #28a745; color: white;" onclick="importServers()">
+                        📤 Importar Lista
+                    </button>
                     <a href="/" class="btn" style="background: #6c757d; color: white;">
                         🏠 Voltar ao Site
                     </a>
@@ -592,6 +595,9 @@
             </div>
         </div>
     </div>
+    
+    <!-- Input file oculto para importação -->
+    <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="handleFileImport(event)">
     
     <!-- Modal para Adicionar/Editar Servidor -->
     <div id="serverModal" class="modal">
@@ -994,6 +1000,71 @@
             } catch (error) {
                 console.error('Erro ao exportar servidores:', error);
                 showError('Erro ao exportar lista de servidores');
+            }
+        }
+        
+        // Importar lista de servidores
+        function importServers() {
+            document.getElementById('importFileInput').click();
+        }
+        
+        // Manipular arquivo de importação
+        async function handleFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            try {
+                showInfo('Processando arquivo...');
+                
+                const text = await file.text();
+                const data = JSON.parse(text);
+                
+                if (!data.servers || !Array.isArray(data.servers)) {
+                    throw new Error('Formato de arquivo inválido');
+                }
+                
+                // Confirmar importação
+                const count = data.servers.length;
+                if (!confirm(`Deseja importar ${count} servidores? Isso pode sobrescrever servidores existentes com as mesmas chaves.`)) {
+                    return;
+                }
+                
+                // Enviar para a rota de importação
+                const response = await fetch('/api/import', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ servers: data.servers })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro na importação');
+                }
+                
+                const result = await response.json();
+                
+                let message = `Importação concluída!\n`;
+                message += `• ${result.imported} novos servidores criados\n`;
+                message += `• ${result.updated} servidores atualizados\n`;
+                
+                if (result.errors.length > 0) {
+                    message += `• ${result.errors.length} erros encontrados`;
+                    console.warn('Erros na importação:', result.errors);
+                }
+                
+                showSuccess(message);
+                
+                // Recarregar dados
+                await loadServers();
+                await loadStats();
+                
+            } catch (error) {
+                console.error('Erro ao importar arquivo:', error);
+                showError('Erro ao processar arquivo de importação');
+            } finally {
+                // Limpar input file
+                event.target.value = '';
             }
         }
         
